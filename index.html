@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Vakasha Lodge — Housekeeping</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Vakasha Lodge">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Vakasha Lodge">
+<meta name="theme-color" content="#4e7352">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="icon" href="./icon-192.png" type="image/png">
+<link rel="manifest" href="./manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage: #7a9e7e;
+  --sage-light: #a8c5ab;
+  --sage-dark: #4e7352;
+  --cream: #f5f0e8;
+  --cream-dark: #ede6d8;
+  --charcoal: #2c2c2c;
+  --warm-gray: #8a8278;
+  --white: #ffffff;
+  --shadow: rgba(44,44,44,0.12);
+  --checked-bg: #e8f2e9;
+  --checked-border: #7a9e7e;
+  --danger: #c0392b;
+  --danger-light: #fdf0f0;
+  --warning: #e0a060;
+}
+[data-theme="dark"] {
+  --sage: #7a9e7e;
+  --sage-light: #4e7352;
+  --sage-dark: #a8c5ab;
+  --cream: #1a1a1a;
+  --cream-dark: #222222;
+  --charcoal: #f0ece4;
+  --warm-gray: #9a9490;
+  --white: #2a2a2a;
+  --shadow: rgba(0,0,0,0.4);
+  --checked-bg: #1a2e1c;
+  --checked-border: #7a9e7e;
+  --danger: #e05050;
+  --danger-light: #2a1010;
+  --warning: #c08040;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  min-height: 100vh;
+  font-size: 15px;
+  padding-bottom: env(safe-area-inset-bottom);
+  transition: background 0.3s, color 0.3s;
+}
+/* HEADER */
+header {
+  background: var(--sage-dark);
+  color: var(--cream);
+  padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 12px var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-left { display: flex; flex-direction: column; gap: 1px; }
+header h1 { font-family: 'Playfair Display', serif; font-size: 1.3rem; letter-spacing: 0.02em; }
+header p { font-size: 0.75rem; color: var(--sage-light); margin-top: 1px; }
+.header-right { display: flex; align-items: center; gap: 8px; }
+.lang-btn {
+  font-size: 0.7rem; font-weight: 700;
+  border: 1px solid var(--sage-light); border-radius: 4px;
+  padding: 4px 9px; color: var(--sage-light);
+  background: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; white-space: nowrap;
+}
+.lang-btn.active { background: var(--sage-light); color: var(--sage-dark); }
+.hamburger-btn {
+  background: none; border: none; cursor: pointer;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 5px; padding: 6px; border-radius: 6px;
+  transition: background 0.15s;
+}
+.hamburger-btn:active { background: rgba(255,255,255,0.1); }
+.hamburger-btn span {
+  display: block; width: 22px; height: 2px;
+  background: var(--cream); border-radius: 2px;
+  transition: all 0.25s;
+}
+.hamburger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* HAMBURGER DROPDOWN MENU */
+.hamburger-menu {
+  display: none;
+  position: fixed;
+  top: 0; right: 0;
+  width: min(280px, 85vw);
+  height: 100vh;
+  background: var(--sage-dark);
+  z-index: 300;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.3);
+  flex-direction: column;
+  overflow-y: auto;
+  padding-top: calc(env(safe-area-inset-top) + 16px);
+  animation: slideInRight 0.25s ease;
+}
+.hamburger-menu.open { display: flex; }
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.menu-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); z-index: 299;
+}
+.menu-overlay.open { display: block; }
+.menu-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.menu-title { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--cream); }
+.menu-close-btn {
+  background: none; border: none; color: var(--sage-light);
+  font-size: 1.4rem; cursor: pointer; padding: 0; line-height: 1;
+}
+.menu-section-title {
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--sage-light);
+  padding: 16px 20px 8px;
+}
+.menu-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 20px; cursor: pointer;
+  border: none; background: none; width: 100%;
+  text-align: left; transition: background 0.15s;
+  color: var(--cream);
+}
+.menu-item:active { background: rgba(255,255,255,0.08); }
+.menu-item-icon { font-size: 1.3rem; flex-shrink: 0; }
+.menu-item-text { display: flex; flex-direction: column; gap: 1px; }
+.menu-item-label { font-size: 0.95rem; font-weight: 600; font-family: 'DM Sans', sans-serif; }
+.menu-item-desc { font-size: 0.75rem; color: var(--sage-light); font-family: 'DM Sans', sans-serif; }
+.menu-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 4px 0; }
+.menu-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px; cursor: pointer; border: none; background: none; width: 100%;
+}
+.menu-toggle-label { font-size: 0.9rem; color: var(--cream); font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 10px; }
+.menu-toggle-switch {
+  width: 40px; height: 22px; background: rgba(255,255,255,0.2);
+  border-radius: 11px; position: relative; transition: background 0.2s; flex-shrink: 0;
+}
+.menu-toggle-switch.on { background: var(--sage-light); }
+.menu-toggle-switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 16px; height: 16px; background: white; border-radius: 50%;
+  transition: transform 0.2s;
+}
+.menu-toggle-switch.on::after { transform: translateX(18px); }
+/* DATE BAR */
+.date-bar { background: var(--cream-dark); padding: 10px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #ddd6ca; }
+.date-nav-btn { background: none; border: 1.5px solid var(--sage-light); border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--sage-dark); font-size: 1rem; flex-shrink: 0; transition: all 0.15s; }
+.date-nav-btn:hover { background: var(--sage-light); color: var(--white); }
+.date-display { flex: 1; text-align: center; }
+.date-display .date-main { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--sage-dark); display: block; }
+.date-display .date-sub { font-size: 0.75rem; color: var(--warm-gray); }
+.date-picker-btn { background: var(--white); border: 1.5px solid var(--sage-light); border-radius: 8px; padding: 6px 12px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--sage-dark); cursor: pointer; flex-shrink: 0; }
+#hiddenDatePicker { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; }
+/* INFO BAR */
+.info-bar { display: flex; gap: 10px; padding: 10px 16px; background: var(--cream); border-bottom: 1px solid #ddd6ca; flex-wrap: wrap; align-items: center; }
+.info-field { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--warm-gray); }
+.info-field label { font-weight: 500; }
+.info-field input, .info-field select { border: 1px solid #ccc5b8; border-radius: 6px; padding: 4px 8px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; background: var(--white); color: var(--charcoal); outline: none; }
+.info-field input:focus, .info-field select:focus { border-color: var(--sage); }
+.field-error { border-color: var(--danger) !important; background: var(--danger-light) !important; animation: shake 0.3s ease; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+/* PROGRESS */
+.progress-wrap { padding: 10px 16px 6px; background: var(--cream); }
+.progress-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--warm-gray); margin-bottom: 5px; }
+.progress-bar-bg { height: 6px; background: #ddd6ca; border-radius: 10px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--sage); border-radius: 10px; transition: width 0.3s ease; }
+/* TABS */
+.tabs { display: flex; overflow-x: auto; scrollbar-width: none; padding: 10px 16px; background: var(--cream-dark); gap: 8px; border-bottom: 1px solid #ddd6ca; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn { flex-shrink: 0; background: var(--white); border: 1.5px solid #ccc5b8; border-radius: 20px; padding: 8px 18px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500; color: var(--warm-gray); cursor: pointer; transition: all 0.18s; white-space: nowrap; }
+.tab-btn:hover { background: var(--sage-light); color: var(--white); border-color: var(--sage-light); }
+.tab-btn.active { background: var(--sage-dark); color: var(--white); border-color: var(--sage-dark); }
+.tab-btn.tab-done { border-color: var(--sage); }
+.tab-btn.tab-done::after { content: " ✓"; color: var(--sage); font-size: 0.75rem; }
+.tab-btn.active.tab-done::after { color: var(--sage-light); }
+/* SECTIONS */
+.section { display: none; padding: 12px 16px 80px; }
+.section.active { display: block; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--sage-dark); margin: 16px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--cream-dark); }
+.section-title:first-child { margin-top: 4px; }
+/* CHECK ITEMS */
+.check-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; background: var(--white); border: 1px solid #e8e1d6; border-radius: 10px; margin-bottom: 6px; transition: all 0.18s; cursor: pointer; }
+.check-item:hover { border-color: var(--sage-light); box-shadow: 0 2px 8px var(--shadow); }
+.check-item.checked { background: var(--checked-bg); border-color: var(--checked-border); }
+.check-item.checked .item-label { color: var(--sage-dark); }
+.custom-checkbox { width: 20px; height: 20px; min-width: 20px; border: 2px solid #ccc5b8; border-radius: 5px; display: flex; align-items: center; justify-content: center; transition: all 0.18s; margin-top: 1px; }
+.check-item.checked .custom-checkbox { background: var(--sage); border-color: var(--sage); }
+.custom-checkbox svg { display: none; }
+.check-item.checked .custom-checkbox svg { display: block; }
+.item-label { font-size: 0.88rem; line-height: 1.4; color: var(--charcoal); }
+/* INVENTORY */
+.inv-item { display: flex; align-items: center; gap: 12px; padding: 9px 12px; background: var(--white); border: 1px solid #e8e1d6; border-radius: 10px; margin-bottom: 6px; cursor: pointer; transition: all 0.18s; }
+.inv-item:hover { border-color: var(--sage-light); }
+.inv-item.checked { background: var(--checked-bg); border-color: var(--checked-border); }
+.inv-item .inv-qty { font-size: 0.75rem; color: var(--warm-gray); font-weight: 500; min-width: 28px; text-align: center; background: var(--cream-dark); border-radius: 4px; padding: 2px 5px; }
+.inv-item.checked .inv-qty { background: var(--sage-light); color: var(--white); }
+/* NOTES */
+.notes-area { background: var(--white); border: 1px solid #e8e1d6; border-radius: 10px; padding: 12px; margin-top: 12px; }
+.notes-area label { display: block; font-size: 0.78rem; font-weight: 500; color: var(--warm-gray); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+.notes-area textarea { width: 100%; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: var(--charcoal); background: transparent; resize: none; min-height: 70px; }
+/* SUBMIT */
+.submit-wrap { position: fixed; bottom: 0; left: 0; right: 0; padding: 14px 16px; background: linear-gradient(to top, var(--cream) 70%, transparent); z-index: 50; }
+.submit-btn { width: 100%; background: var(--sage-dark); color: var(--white); border: none; border-radius: 12px; padding: 14px; font-family: 'Playfair Display', serif; font-size: 1rem; cursor: pointer; transition: background 0.2s; letter-spacing: 0.02em; }
+.submit-btn:hover { background: var(--sage); }
+/* TOAST */
+.toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--sage-dark); color: var(--white); padding: 10px 24px; border-radius: 50px; font-size: 0.85rem; opacity: 0; transition: all 0.3s; white-space: nowrap; z-index: 200; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+/* FULL SCREENS */
+.full-screen { display: none; position: fixed; inset: 0; background: var(--cream); z-index: 2000; overflow-y: auto; }
+.full-screen.open { display: block; }
+.screen-header { background: var(--sage-dark); color: var(--cream); padding: 20px 20px 16px; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 1; }
+.screen-back-btn { background: none; border: none; color: var(--sage-light); font-size: 1.5rem; cursor: pointer; padding: 0; line-height: 1; }
+.screen-header h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--cream); flex: 1; }
+.screen-lang-btn { font-size: 0.65rem; font-weight: 700; border: 1px solid var(--sage-light); border-radius: 4px; padding: 3px 7px; color: var(--sage-light); background: none; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; flex-shrink: 0; }
+.screen-lang-btn.active { background: var(--sage-light); color: var(--sage-dark); }
+.screen-body { padding: 16px; }
+/* SUMMARY LOG */
+.summary-clear-btn { background: none; border: 1px solid var(--sage-light); border-radius: 6px; color: var(--sage-light); font-size: 0.75rem; padding: 5px 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.summary-empty { text-align: center; color: var(--warm-gray); padding: 60px 20px; font-size: 0.9rem; line-height: 1.8; }
+.summary-empty span { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+.log-card { background: var(--white); border: 1px solid #e8e1d6; border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+.log-card.incomplete { border-left: 4px solid var(--danger); }
+.log-card-header { background: var(--sage-dark); color: var(--white); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+.log-card.incomplete .log-card-header { background: #7a2020; }
+.log-room { font-family: 'Playfair Display', serif; font-size: 1rem; }
+.log-meta { font-size: 0.75rem; color: var(--sage-light); text-align: right; line-height: 1.5; }
+.log-card.incomplete .log-meta { color: #ffaaaa; }
+.log-card-body { padding: 12px 14px; }
+.log-section-title { font-size: 0.72rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-gray); margin: 10px 0 6px; }
+.log-section-title:first-child { margin-top: 0; }
+.log-items { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 4px; }
+.log-tag { background: var(--checked-bg); border: 1px solid var(--checked-border); color: var(--sage-dark); font-size: 0.72rem; padding: 3px 8px; border-radius: 20px; }
+.log-tag.missed { background: var(--danger-light); border-color: #e0a0a0; color: var(--danger); }
+.log-notes { font-size: 0.8rem; color: var(--warm-gray); font-style: italic; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--cream-dark); }
+.log-score { display: inline-block; background: var(--sage); color: var(--white); font-size: 0.75rem; font-weight: 500; padding: 3px 10px; border-radius: 20px; margin-top: 8px; }
+.log-score.partial { background: var(--warning); }
+.log-score.incomplete-badge { background: var(--danger); }
+.supervisor-note-area { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--cream-dark); }
+.supervisor-note-area label { font-size: 0.72rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--warm-gray); display: block; margin-bottom: 4px; }
+.supervisor-note-input { width: 100%; border: 1px solid #ccc5b8; border-radius: 6px; padding: 6px 10px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; background: var(--cream); color: var(--charcoal); outline: none; resize: none; min-height: 50px; }
+.supervisor-note-save { margin-top: 5px; background: var(--sage-dark); color: var(--white); border: none; border-radius: 6px; padding: 5px 14px; font-size: 0.8rem; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.supervisor-note-display { font-size: 0.82rem; color: var(--sage-dark); font-style: italic; margin-top: 6px; }
+/* DASHBOARD */
+.dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 4px 0; }
+.room-tile { background: var(--white); border: 1.5px solid #e8e1d6; border-radius: 12px; padding: 12px 8px; text-align: center; cursor: pointer; transition: all 0.18s; }
+.room-tile.complete { background: var(--checked-bg); border-color: var(--checked-border); }
+.room-tile.partial { background: #fff8ee; border-color: var(--warning); }
+.room-tile.incomplete { background: var(--danger-light); border-color: #e0a0a0; }
+.room-tile-num { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--sage-dark); display: block; }
+.room-tile.complete .room-tile-num { color: var(--sage-dark); }
+.room-tile.partial .room-tile-num { color: #8b5e10; }
+.room-tile.incomplete .room-tile-num { color: var(--danger); }
+.room-tile-status { font-size: 0.65rem; color: var(--warm-gray); margin-top: 2px; display: block; }
+.room-tile-icon { font-size: 1.3rem; display: block; margin-bottom: 2px; }
+.dash-date { font-size: 0.82rem; color: var(--warm-gray); text-align: center; padding: 8px 0 14px; }
+/* WEEKLY SUMMARY */
+.weekly-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.stat-card { background: var(--white); border: 1px solid #e8e1d6; border-radius: 12px; padding: 14px; text-align: center; }
+.stat-card .stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--sage-dark); display: block; }
+.stat-card .stat-label { font-size: 0.75rem; color: var(--warm-gray); margin-top: 2px; }
+.missed-item-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--white); border: 1px solid #e8e1d6; border-radius: 8px; margin-bottom: 6px; font-size: 0.82rem; }
+.missed-item-row .miss-count { background: var(--danger); color: white; border-radius: 12px; padding: 2px 8px; font-size: 0.72rem; font-weight: 600; }
+.week-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.week-nav-btn { background: none; border: 1.5px solid var(--sage-light); border-radius: 8px; padding: 6px 14px; color: var(--sage-dark); cursor: pointer; font-size: 0.82rem; font-family: 'DM Sans', sans-serif; }
+.week-nav-label { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--sage-dark); }
+/* CLEAR CONFIRM */
+#clearConfirm { background: var(--danger-light); padding: 12px 16px; font-size: 0.85rem; color: var(--danger); display: none; align-items: center; justify-content: space-between; gap: 10px; }
+@media (min-width: 600px) { .check-item, .inv-item { max-width: 620px; } .dashboard-grid { grid-template-columns: repeat(6, 1fr); } }
+
+/* PIN MODAL */
+.pin-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:4000; align-items:center; justify-content:center; padding:20px; }
+.pin-overlay.open { display:flex; }
+.pin-box { background:var(--cream); border-radius:20px; padding:28px 24px; width:100%; max-width:320px; text-align:center; box-shadow:0 8px 40px rgba(0,0,0,0.3); }
+.pin-box h3 { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--sage-dark); margin-bottom:6px; }
+.pin-box p { font-size:0.82rem; color:var(--warm-gray); margin-bottom:18px; }
+.pin-dots { display:flex; justify-content:center; gap:12px; margin-bottom:20px; }
+.pin-dot { width:14px; height:14px; border-radius:50%; border:2px solid var(--sage-light); background:transparent; transition:background 0.15s; }
+.pin-dot.filled { background:var(--sage-dark); border-color:var(--sage-dark); }
+.pin-keypad { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.pin-key { background:var(--white); border:1.5px solid #e8e1d6; border-radius:12px; padding:16px; font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--charcoal); cursor:pointer; transition:all 0.15s; }
+.pin-key:active { background:var(--sage-light); color:white; }
+.pin-key.del { font-size:1rem; font-family:'DM Sans',sans-serif; color:var(--warm-gray); }
+.pin-key.empty { background:transparent; border-color:transparent; cursor:default; }
+.pin-error { color:var(--danger); font-size:0.8rem; margin-top:10px; min-height:20px; }
+
+/* OFFLINE BANNER */
+.offline-banner { display:none; background:#e07030; color:white; text-align:center; padding:6px 16px; font-size:0.78rem; font-weight:500; }
+.offline-banner.show { display:block; }
+
+/* CONFIRM MODAL */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:3000; align-items:center; justify-content:center; padding:20px; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:var(--cream); border-radius:16px; padding:24px 20px; width:100%; max-width:380px; box-shadow:0 8px 30px rgba(0,0,0,0.2); }
+.modal-box h3 { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--sage-dark); margin-bottom:8px; }
+.modal-box p { font-size:0.88rem; color:var(--warm-gray); margin-bottom:6px; line-height:1.5; }
+.modal-box .modal-room { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--charcoal); margin:8px 0 4px; }
+.modal-box .modal-score { font-size:0.82rem; color:var(--warm-gray); margin-bottom:16px; }
+.modal-box .modal-score.partial { color:var(--warning); }
+.modal-btns { display:flex; gap:10px; margin-top:16px; }
+.modal-confirm-btn { flex:1; background:var(--sage-dark); color:var(--white); border:none; border-radius:10px; padding:13px; font-family:'DM Sans',sans-serif; font-weight:600; font-size:0.95rem; cursor:pointer; }
+.modal-cancel-btn { flex:1; background:none; color:var(--warm-gray); border:1.5px solid #ccc5b8; border-radius:10px; padding:13px; font-family:'DM Sans',sans-serif; font-size:0.95rem; cursor:pointer; }
+
+
+/* CUSTOM ITEMS */
+.custom-section-select { width:100%; border:1.5px solid #ccc5b8; border-radius:8px; padding:9px 12px; font-family:'DM Sans',sans-serif; font-size:0.88rem; background:var(--white); color:var(--charcoal); outline:none; margin-bottom:10px; }
+.custom-input-row { display:flex; gap:8px; margin-bottom:16px; }
+.custom-input-row input { flex:1; border:1.5px solid #ccc5b8; border-radius:8px; padding:9px 12px; font-family:'DM Sans',sans-serif; font-size:0.88rem; background:var(--white); color:var(--charcoal); outline:none; }
+.custom-add-btn { background:var(--sage-dark); color:var(--white); border:none; border-radius:8px; padding:9px 16px; font-family:'DM Sans',sans-serif; font-size:0.88rem; cursor:pointer; white-space:nowrap; }
+.custom-translate-btn { background:none; border:1.5px solid var(--sage-light); border-radius:8px; padding:9px 12px; font-family:'DM Sans',sans-serif; font-size:0.82rem; color:var(--sage-dark); cursor:pointer; white-space:nowrap; flex-shrink:0; transition:all 0.15s; }
+.custom-translate-btn:disabled { opacity:0.5; cursor:wait; }
+.custom-translate-btn:hover:not(:disabled) { background:var(--sage-light); color:var(--white); }
+.custom-ss-input { width:100%; border:1.5px solid var(--sage-light); border-radius:8px; padding:9px 12px; font-family:'DM Sans',sans-serif; font-size:0.88rem; background:var(--checked-bg); color:var(--charcoal); outline:none; }
+.custom-item-row { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:var(--white); border:1px solid #e8e1d6; border-radius:8px; margin-bottom:6px; font-size:0.82rem; }
+.custom-item-row.is-custom { border-left:3px solid var(--sage); }
+.custom-del-btn { background:none; border:none; color:#e05050; cursor:pointer; font-size:1rem; padding:2px 6px; }
+
+/* ROOM NOTES */
+.room-notes-select { width:100%; border:1.5px solid #ccc5b8; border-radius:8px; padding:10px 12px; font-family:'DM Sans',sans-serif; font-size:0.9rem; background:var(--white); color:var(--charcoal); outline:none; margin-bottom:16px; }
+.room-note-entry { background:var(--white); border:1px solid #e8e1d6; border-radius:10px; padding:12px 14px; margin-bottom:10px; }
+.room-note-date { font-size:0.75rem; color:var(--warm-gray); margin-bottom:4px; }
+.room-note-by { font-size:0.72rem; color:var(--sage-dark); font-weight:500; margin-bottom:6px; }
+.room-note-text { font-size:0.85rem; color:var(--charcoal); font-style:italic; }
+
+/* SPLASH SCREEN */
+.splash {
+  position: fixed;
+  inset: 0;
+  background: #0d1f0f;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  transition: opacity 0.6s ease;
+}
+.splash.fade-out { opacity: 0; pointer-events: none; }
+.splash-logo {
+  width: 200px;
+  height: 200px;
+  border-radius: 28px;
+  object-fit: cover;
+  animation: splashPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.splash-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: #c9a84c;
+  letter-spacing: 0.12em;
+  margin-top: 20px;
+  animation: splashFadeUp 0.6s ease 0.3s both;
+}
+.splash-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  color: #7a9e7e;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 6px;
+  animation: splashFadeUp 0.6s ease 0.5s both;
+}
+.splash-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 36px;
+  animation: splashFadeUp 0.6s ease 0.7s both;
+}
+.splash-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #4e7352;
+  animation: splashPulse 1.2s ease-in-out infinite;
+}
+.splash-dot:nth-child(2) { animation-delay: 0.2s; }
+.splash-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes splashPop {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes splashFadeUp {
+  0% { transform: translateY(12px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes splashPulse {
+  0%, 100% { background: #4e7352; transform: scale(1); }
+  50% { background: #c9a84c; transform: scale(1.4); }
+}
+
+/* MODE SWITCHER */
+.mode-switcher {
+  display: flex;
+}
+.mode-btn {
+  flex: 1;
+  padding: 11px;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+  background: var(--cream-dark);
+  color: var(--warm-gray);
+}
+.mode-btn.active {
+  background: var(--sage-dark);
+  color: var(--white);
+}
+.mode-btn:first-child { border-right: 1px solid #ddd6ca; }
+
+/* LOG FILTER */
+.log-filter-bar { display:flex; gap:8px; padding:10px 16px; background:var(--cream-dark); border-bottom:1px solid #ddd6ca; overflow-x:auto; scrollbar-width:none; flex-wrap:wrap; }
+.log-filter-bar::-webkit-scrollbar { display:none; }
+.filter-btn { flex-shrink:0; border:1.5px solid #ccc5b8; border-radius:16px; padding:5px 12px; font-size:0.78rem; font-family:'DM Sans',sans-serif; background:var(--white); color:var(--warm-gray); cursor:pointer; transition:all 0.15s; }
+.filter-btn.active { background:var(--sage-dark); color:var(--white); border-color:var(--sage-dark); }
+.filter-input { flex:1; min-width:120px; border:1.5px solid #ccc5b8; border-radius:16px; padding:5px 12px; font-size:0.78rem; font-family:'DM Sans',sans-serif; background:var(--white); color:var(--charcoal); outline:none; }
+
+/* CONGRATULATIONS */
+.congrats-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:5000; align-items:center; justify-content:center; }
+.congrats-overlay.show { display:flex; animation:fadeInBg 0.3s ease; }
+.congrats-box { background:var(--cream); border-radius:20px; padding:32px 28px; text-align:center; max-width:300px; width:90%; box-shadow:0 8px 40px rgba(0,0,0,0.3); animation:splashPop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+.congrats-emoji { font-size:3.5rem; display:block; margin-bottom:12px; }
+.congrats-title { font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--sage-dark); margin-bottom:8px; }
+.congrats-msg { font-size:0.88rem; color:var(--warm-gray); line-height:1.5; }
+@keyframes fadeInBg { from { opacity:0; } to { opacity:1; } }</style>
+</head>
+<body>
+
+<!-- CONGRATULATIONS OVERLAY -->
+<div class="congrats-overlay" id="congratsOverlay" onclick="closeCongratsOverlay()">
+  <div class="congrats-box" onclick="event.stopPropagation()">
+    <span class="congrats-emoji">🎉</span>
+    <div class="congrats-title" id="congratsTitle">Outstanding!</div>
+    <div class="congrats-msg" id="congratsMsg">100% complete — every item checked!</div>
+  </div>
+</div>
+
+<!-- SPLASH SCREEN -->
+<div class="splash" id="splashScreen">
+  <img class="splash-logo" src="data:image/jpeg;base64,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" alt="Vakasha Lodge">
+  <div class="splash-title">VAKASHA</div>
+  <div class="splash-sub">Lodge &nbsp;·&nbsp; Cleaning</div>
+  <div class="splash-dots">
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+  </div>
+</div>
+
+
+<!-- OFFLINE BANNER -->
+<div class="offline-banner" id="offlineBanner">⚠️ You are offline — checklist works, Telegram alerts will send when reconnected</div>
+
+<!-- PIN MODAL -->
+<div class="pin-overlay" id="pinModal" onclick="closePinOutside(event)">
+  <div class="pin-box" onclick="event.stopPropagation()">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <button onclick="closePin()" style="background:none;border:none;color:var(--warm-gray);font-size:1.4rem;cursor:pointer;padding:0;line-height:1;">✕</button>
+      <div style="display:flex;gap:6px;">
+        <button class="screen-lang-btn" id="sl-en-pin" onclick="setLang('en')">EN</button>
+        <button class="screen-lang-btn" id="sl-ss-pin" onclick="setLang('ss')">SS</button>
+      </div>
+    </div>
+    <h3>🔒 Manager Access</h3>
+    <p>Enter your 4-digit PIN</p>
+    <div class="pin-dots">
+      <div class="pin-dot" id="pd0"></div>
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
+    </div>
+    <div class="pin-keypad">
+      <button class="pin-key" onclick="pinPress('1')">1</button>
+      <button class="pin-key" onclick="pinPress('2')">2</button>
+      <button class="pin-key" onclick="pinPress('3')">3</button>
+      <button class="pin-key" onclick="pinPress('4')">4</button>
+      <button class="pin-key" onclick="pinPress('5')">5</button>
+      <button class="pin-key" onclick="pinPress('6')">6</button>
+      <button class="pin-key" onclick="pinPress('7')">7</button>
+      <button class="pin-key" onclick="pinPress('8')">8</button>
+      <button class="pin-key" onclick="pinPress('9')">9</button>
+      <button class="pin-key empty"></button>
+      <button class="pin-key" onclick="pinPress('0')">0</button>
+      <button class="pin-key del" onclick="pinDelete()">⌫</button>
+    </div>
+    <div class="pin-error" id="pinError"></div>
+  </div>
+</div>
+
+<!-- MENU OVERLAY -->
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+
+<!-- SLIDE-OUT HAMBURGER MENU -->
+<div class="hamburger-menu" id="hamburgerMenu">
+  <div class="menu-header">
+    <span class="menu-title">Vakasha Lodge</span>
+    <button class="menu-close-btn" onclick="closeMenu()">✕</button>
+  </div>
+
+  <!-- Language -->
+  <div class="menu-section-title" id="menu-lang-title">Language</div>
+  <div style="display:flex;gap:8px;padding:4px 20px 12px;">
+    <button class="lang-btn" id="langBtnEN" onclick="setLang('en');closeMenu()">English</button>
+    <button class="lang-btn" id="langBtnSS" onclick="setLang('ss');closeMenu()">siSwati</button>
+  </div>
+
+  <div class="menu-divider"></div>
+
+  <!-- Dark Mode toggle -->
+  <button class="menu-toggle-row" onclick="toggleDark()">
+    <span class="menu-toggle-label">🌙 <span id="menu-dark-lbl">Dark Mode</span></span>
+    <div class="menu-toggle-switch" id="darkToggleSwitch"></div>
+  </button>
+
+  <div class="menu-divider"></div>
+
+  <!-- Manager section -->
+  <div class="menu-section-title" id="menu-mgr-title">Manager</div>
+
+  <button class="menu-item" onclick="closeMenu();requirePin('dashboard')">
+    <span class="menu-item-icon">🏠</span>
+    <span class="menu-item-text">
+      <span class="menu-item-label" id="lbl-dashboard">Room Dashboard</span>
+      <span class="menu-item-desc" id="menu-desc-dashboard">Today's room & chalet status</span>
+    </span>
+  </button>
+
+  <button class="menu-item" onclick="closeMenu();requirePin('summary')">
+    <span class="menu-item-icon">📋</span>
+    <span class="menu-item-text">
+      <span class="menu-item-label" id="lbl-summary">Completion Log</span>
+      <span class="menu-item-desc" id="menu-desc-log">Full history of all submissions</span>
+    </span>
+  </button>
+
+  <button class="menu-item" onclick="closeMenu();requirePin('weekly')">
+    <span class="menu-item-icon">📊</span>
+    <span class="menu-item-text">
+      <span class="menu-item-label" id="lbl-weekly">Weekly Summary</span>
+      <span class="menu-item-desc" id="menu-desc-weekly">Performance stats by week</span>
+    </span>
+  </button>
+
+  <button class="menu-item" onclick="closeMenu();requirePin('roomNotes')">
+    <span class="menu-item-icon">📝</span>
+    <span class="menu-item-text">
+      <span class="menu-item-label" id="lbl-notes">Room Notes History</span>
+      <span class="menu-item-desc" id="menu-desc-notes">Notes per room or chalet</span>
+    </span>
+  </button>
+
+  <button class="menu-item" onclick="closeMenu();requirePin('custom')">
+    <span class="menu-item-icon">⚙️</span>
+    <span class="menu-item-text">
+      <span class="menu-item-label" id="lbl-custom">Manage Checklist</span>
+      <span class="menu-item-desc" id="menu-desc-manage">Add or remove checklist items</span>
+    </span>
+  </button>
+</div>
+
+<header>
+  <div class="header-left">
+    <h1>Vakasha Lodge</h1>
+    <p id="hdr-sub">Daily room &amp; facility checklist</p>
+  </div>
+  <div class="header-right">
+    <button class="lang-btn" id="langBtnEN2" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" id="langBtnSS2" onclick="setLang('ss')">SS</button>
+    <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- DASHBOARD SCREEN -->
+<div class="full-screen" id="dashboardScreen">
+  <div class="screen-header">
+    <button class="screen-back-btn" onclick="closeDashboard()">&#8592;</button>
+    <h2 id="dash-title">🏠 Room Dashboard</h2>
+  
+    <button class="screen-lang-btn" id="sl-en-db" onclick="setLang('en')">EN</button><button class="screen-lang-btn" id="sl-ss-db" onclick="setLang('ss')">SS</button></div>
+  <div class="screen-body">
+    <div class="dash-date" id="dashDate"></div>
+    <div class="dashboard-grid" id="dashGrid"></div>
+  </div>
+</div>
+
+<!-- SUMMARY SCREEN -->
+<div class="full-screen" id="summaryScreen">
+  <div class="screen-header">
+    <button class="screen-back-btn" onclick="closeSummary()">&#8592;</button>
+    <h2 id="log-title">📋 Completion Log</h2>
+    <button class="summary-clear-btn" id="clearBtn" onclick="confirmClear()" id="clear-btn-lbl">Clear All</button>
+  
+    <button class="screen-lang-btn" id="sl-en-su" onclick="setLang('en')">EN</button><button class="screen-lang-btn" id="sl-ss-su" onclick="setLang('ss')">SS</button></div>
+  <div id="clearConfirm">
+    <span id="clear-confirm-lbl">Delete all entries?</span>
+    <div style="display:flex;gap:8px;">
+      <button onclick="cancelClear()" style="background:none;border:1px solid #ccc;border-radius:6px;padding:5px 12px;cursor:pointer;font-size:0.82rem;" id="cancel-lbl">Cancel</button>
+      <button onclick="doClear()" style="background:#a04040;color:white;border:none;border-radius:6px;padding:5px 12px;cursor:pointer;font-size:0.82rem;" id="yes-lbl">Yes, delete</button>
+    </div>
+  </div>
+  <div class="screen-body" id="summaryBody"></div>
+</div>
+
+<!-- filter bar is injected by renderSummary -->
+
+<!-- WEEKLY SCREEN -->
+<div class="full-screen" id="weeklyScreen">
+  <div class="screen-header">
+    <button class="screen-back-btn" onclick="closeWeekly()">&#8592;</button>
+    <h2 id="weekly-title">📊 Weekly Summary</h2>
+  
+    <button class="screen-lang-btn" id="sl-en-wk" onclick="setLang('en')">EN</button><button class="screen-lang-btn" id="sl-ss-wk" onclick="setLang('ss')">SS</button></div>
+  <div class="screen-body" id="weeklyBody"></div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box">
+    <h3 id="confirm-title">Sign Off Confirmation</h3>
+    <p id="confirm-msg">You are signing off</p>
+    <div class="modal-room" id="confirm-room"></div>
+    <div class="modal-score" id="confirm-score"></div>
+    <p id="confirm-msg2">Are you sure?</p>
+    <div class="modal-btns">
+      <button class="modal-cancel-btn" onclick="closeConfirm()" id="confirm-no">Go Back</button>
+      <button class="modal-confirm-btn" onclick="confirmSubmit()" id="confirm-yes">✓ Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- ROOM NOTES SCREEN -->
+<div class="full-screen" id="roomNotesScreen">
+  <div class="screen-header">
+    <button class="screen-back-btn" onclick="closeRoomNotes()">&#8592;</button>
+    <h2 id="room-notes-title">📝 Room Notes History</h2>
+  
+    <button class="screen-lang-btn" id="sl-en-rn" onclick="setLang('en')">EN</button><button class="screen-lang-btn" id="sl-ss-rn" onclick="setLang('ss')">SS</button></div>
+  <div class="screen-body">
+    <select class="room-notes-select" id="roomNotesSelect" onchange="renderRoomNotes()">
+      <option value="">Select a unit…</option>
+      <optgroup label="🏨 Rooms">
+        <option value="Room-1">Room 1</option><option value="Room-2">Room 2</option><option value="Room-3">Room 3</option>
+        <option value="Room-4">Room 4</option><option value="Room-5">Room 5</option><option value="Room-6">Room 6</option>
+        <option value="Room-7">Room 7</option><option value="Room-8">Room 8</option><option value="Room-9">Room 9</option>
+        <option value="Room-10">Room 10</option><option value="Room-11">Room 11</option><option value="Room-12">Room 12</option>
+        <option value="Room-13">Room 13</option><option value="Room-14">Room 14</option><option value="Room-15">Room 15</option>
+        <option value="Room-16">Room 16</option><option value="Room-17">Room 17</option><option value="Room-18">Room 18</option>
+      </optgroup>
+      <optgroup label="🏡 Chalets">
+        <option value="Chalet-1">Chalet 1</option>
+        <option value="Chalet-2">Chalet 2</option>
+        <option value="Chalet-3">Chalet 3</option>
+        <option value="Chalet-4">Chalet 4</option>
+      </optgroup>
+    </select>
+    <div id="roomNotesBody"></div>
+  </div>
+</div>
+
+<!-- CUSTOM ITEMS SCREEN -->
+<div class="full-screen" id="customScreen">
+  <div class="screen-header">
+    <button class="screen-back-btn" onclick="closeCustom()">&#8592;</button>
+    <h2 id="custom-title">⚙️ Manage Checklist</h2>
+  
+    <button class="screen-lang-btn" id="sl-en-cx" onclick="setLang('en')">EN</button><button class="screen-lang-btn" id="sl-ss-cx" onclick="setLang('ss')">SS</button></div>
+  <div class="screen-body">
+    <!-- Unit switcher inside manage checklist -->
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <button id="customModeRoomBtn" onclick="setCustomMode('room')"
+        style="flex:1;padding:9px;border-radius:8px;border:1.5px solid var(--sage-light);font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;background:var(--sage);color:var(--white);transition:all 0.2s;">
+        🏨 Rooms
+      </button>
+      <button id="customModeChaletBtn" onclick="setCustomMode('chalet')"
+        style="flex:1;padding:9px;border-radius:8px;border:1.5px solid var(--sage-light);font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;background:var(--white);color:var(--sage-dark);transition:all 0.2s;">
+        🏡 Chalets
+      </button>
+    </div>
+
+    <select class="custom-section-select" id="customSectionSelect" onchange="renderCustomItems()">
+      <option value="bathroom-clean">Bathroom Cleaning</option>
+      <option value="bathroom-inv">Bathroom Inventory</option>
+      <option value="room-clean">Room Cleaning</option>
+      <option value="room-inv">Room Inventory</option>
+      <option value="patio-clean">Patio</option>
+    </select>
+
+    <!-- English input -->
+    <div style="margin-bottom:8px">
+      <label style="font-size:0.75rem;font-weight:600;color:var(--warm-gray);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px">English</label>
+      <div class="custom-input-row">
+        <input type="text" id="customItemInput" placeholder="e.g. Shower curtain cleaned" oninput="clearSsTranslation()">
+        <button class="custom-translate-btn" onclick="translateToSiswati()" id="translateBtn">🌍 Translate</button>
+      </div>
+    </div>
+
+    <!-- siSwati translation -->
+    <div style="margin-bottom:16px">
+      <label style="font-size:0.75rem;font-weight:600;color:var(--warm-gray);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px">siSwati <span style="font-weight:400;font-style:italic;text-transform:none" id="ssTranslateStatus"></span></label>
+      <input type="text" id="customItemInputSS" class="custom-ss-input" placeholder="siSwati translation will appear here…">
+    </div>
+
+    <button class="custom-add-btn" onclick="addCustomItem()" id="custom-add-btn" style="width:100%;padding:11px;border-radius:8px;font-size:0.9rem">+ Add Item</button>
+    <div id="customItemsList" style="margin-top:16px"></div>
+  </div>
+</div>
+<div class="date-bar">
+  <div class="date-display" style="text-align:center;flex:1">
+    <span class="date-main" id="dateMain"></span>
+    <span class="date-sub" id="dateSub"></span>
+  </div>
+</div>
+
+<!-- MODE SWITCHER -->
+<div class="mode-switcher">
+  <button class="mode-btn active" id="modeRoomBtn" onclick="switchMode('room')">🏨 Rooms</button>
+  <button class="mode-btn" id="modeChaletBtn" onclick="switchMode('chalet')">🏡 Chalets</button>
+</div>
+
+<!-- Info fields -->
+<div class="info-bar">
+  <div class="info-field" id="roomField">
+    <label id="room-lbl">Room #</label>
+    <select id="roomNum" style="width:110px">
+      <option value="">Select…</option>
+      <option value="1">Room 1</option><option value="2">Room 2</option><option value="3">Room 3</option>
+      <option value="4">Room 4</option><option value="5">Room 5</option><option value="6">Room 6</option>
+      <option value="7">Room 7</option><option value="8">Room 8</option><option value="9">Room 9</option>
+      <option value="10">Room 10</option><option value="11">Room 11</option><option value="12">Room 12</option>
+      <option value="13">Room 13</option><option value="14">Room 14</option><option value="15">Room 15</option>
+      <option value="16">Room 16</option><option value="17">Room 17</option><option value="18">Room 18</option>
+    </select>
+  </div>
+  <div class="info-field" id="chaletField" style="display:none">
+    <label id="chalet-lbl">Chalet #</label>
+    <select id="chaletNum" style="width:110px">
+      <option value="">Select…</option>
+      <option value="1">Chalet 1</option>
+      <option value="2">Chalet 2</option>
+      <option value="3">Chalet 3</option>
+      <option value="4">Chalet 4</option>
+    </select>
+  </div>
+  <div class="info-field">
+    <label id="by-lbl">Checked by</label>
+    <input type="text" id="checkedBy" placeholder="Name" style="width:120px">
+  </div>
+</div>
+
+<!-- Progress -->
+<div class="progress-wrap">
+  <div class="progress-label"><span id="prog-lbl">Progress</span><span id="progressText">0 / 0 complete</span></div>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('bathroom',this)" id="tab-bathroom-btn">🚿 <span id="tab-bath-lbl">Bathroom</span></button>
+  <button class="tab-btn" onclick="showTab('room',this)" id="tab-room-btn">🛏 <span id="tab-room-lbl">Room</span></button>
+  <button class="tab-btn" onclick="showTab('patio',this)" id="tab-patio-btn">☀️ <span id="tab-patio-lbl">Patio</span></button>
+</div>
+
+<!-- BATHROOM -->
+<div class="section active" id="tab-bathroom">
+  <p class="section-title" id="sec-bath-clean">Cleaning Tasks</p>
+  <div id="list-bathroom-clean"></div>
+  <p class="section-title" id="sec-bath-inv">Bathroom Inventory Check</p>
+  <div id="list-bathroom-inv"></div>
+  <div class="notes-area"><label id="notes-lbl-b">Notes</label><textarea id="notes-bathroom" placeholder="Any issues or observations…"></textarea></div>
+</div>
+
+<!-- ROOM -->
+<div class="section" id="tab-room">
+  <p class="section-title" id="sec-room-clean">Cleaning Tasks</p>
+  <div id="list-room-clean"></div>
+  <p class="section-title" id="sec-room-inv">Room Inventory Check</p>
+  <div id="list-room-inv"></div>
+  <div class="notes-area"><label id="notes-lbl-r">Notes</label><textarea id="notes-room" placeholder="Any issues or observations…"></textarea></div>
+</div>
+
+<!-- PATIO -->
+<div class="section" id="tab-patio">
+  <p class="section-title" id="sec-patio-clean">Cleaning Tasks</p>
+  <div id="list-patio-clean"></div>
+  <div class="notes-area"><label id="notes-lbl-p">Notes</label><textarea id="notes-patio" placeholder="Any issues or observations…"></textarea></div>
+</div>
+
+<div class="submit-wrap">
+  <button class="submit-btn" onclick="submitChecklist()" id="submit-btn">✓ Mark as Complete</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── TRANSLATIONS ──
+const T = {
+  en: {
+    sub: 'Daily room & facility checklist',
+    roomLbl: 'Room #', chaletLbl: 'Chalet #', byLbl: 'Checked by', progLbl: 'Progress',
+    tabBath: 'Bathroom', tabRoom: 'Room', tabPatio: 'Patio',
+    secBathClean: 'Cleaning Tasks', secBathInv: 'Bathroom Inventory Check',
+    secRoomClean: 'Cleaning Tasks', secRoomInv: 'Room Inventory Check',
+    secPatioClean: 'Cleaning Tasks',
+    notesLbl: 'Notes', submitBtn: '✓ Mark as Complete',
+    modeRooms: '🏨 Rooms', modeChalets: '🏡 Chalets',
+    dashTitle: '🏠 Room Dashboard', logTitle: '📋 Completion Log',
+    weeklyTitle: '📊 Weekly Summary',
+    roomNotesTitle: '📝 Room Notes History',
+    customTitle: '⚙️ Manage Checklist',
+    today: 'Today', yesterday: 'Yesterday', tomorrow: 'Tomorrow',
+    noLogs: 'No completed checklists yet. Tap Mark as Complete after finishing a room.',
+    complete: 'Complete', partial: 'Partial', notStarted: 'Not started',
+    supNote: 'Supervisor Note', saveNote: 'Save Note',
+    clearAll: 'Clear All', deleteAll: 'Delete all entries?',
+    cancel: 'Cancel', yesDelete: 'Yes, delete',
+    selectRoom: '⚠️ Please select a room number',
+    selectChalet: '⚠️ Please select a chalet number',
+    enterName: '⚠️ Please enter your name',
+    needBath: '⚠️ Please check at least one Bathroom item',
+    needRoom: '⚠️ Please check at least one Room item',
+    needPatio: '⚠️ Please check at least one Patio item',
+    saved: 'Saved!', complete100: '✓ All done!',
+    signedOff: 'fully signed off',
+    missed: 'items missed',
+    weekOf: 'Week of',
+    roomsCompleted: 'Rooms Completed', avgCompletion: 'Avg Completion',
+    totalSubmissions: 'Total Submissions', incompleteRooms: 'Incomplete Rooms',
+    topMissed: 'Most Commonly Missed Items', noData: 'No data for this week yet.',
+    notePlaceholder: 'Add supervisor note…', noteSaved: '✓ Note saved',
+    confirmTitle: 'Sign Off Confirmation', confirmMsg: 'You are signing off',
+    confirmMsg2: 'Are you sure?', confirmYes: '✓ Yes, Submit', confirmNo: 'Go Back',
+    customAdd: 'Add Item', customSave: '✓ Save', customDelete: 'Delete',
+    customPlaceholder: 'New item description…', customSection: 'Section',
+    customAdded: '✓ Item added', customDeleted: 'Item removed',
+    roomNotesNone: 'No notes for this room yet.',
+    roomNotesSelect: 'Select a room to view its notes history',
+    itemChecked: 'checked',
+    menuLang: 'Language', menuDark: 'Dark Mode', menuManager: 'Manager',
+    menuDashDesc: "Today's room & chalet status",
+    menuLogDesc: 'Full history of all submissions',
+    menuWeeklyDesc: 'Performance stats by week',
+    menuNotesDesc: 'Notes per room or chalet',
+    menuManageDesc: 'Add or remove checklist items',
+    customModeRooms: '🏨 Rooms', customModeChalets: '🏡 Chalets',
+    dashRooms: '🏨 Rooms', dashChalets: '🏡 Chalets',
+    filterAll: 'All', filterComplete: '✅ Complete', filterIncomplete: '⚠️ Incomplete',
+    searchPlaceholder: '🔍 Search name or room…',
+  },
+  ss: {
+    sub: 'Luhlelo lwekuhlanta ikamelo nsuku zonke',
+    roomLbl: 'Kamelo #', chaletLbl: 'Chalet #', byLbl: 'Uhlantwe ngu', progLbl: 'Inkhambiso',
+    tabBath: 'Geza', tabRoom: 'Kamelo', tabPatio: 'Patio',
+    secBathClean: 'Imisebenti Yekulahlanta', secBathInv: 'Imikhiqizo Yegezelo',
+    secRoomClean: 'Imisebenti Yekulahlanta', secRoomInv: 'Imikhiqizo Yekamelo',
+    secPatioClean: 'Imisebenti Yekulahlanta',
+    notesLbl: 'Tiphawulo', submitBtn: '✓ Phela Uhlelo',
+    modeRooms: '🏨 Emakamelo', modeChalets: '🏡 Emachwalet',
+    dashTitle: '🏠 Simo Sekamelo', logTitle: '📋 Rekhodi Yekuphela',
+    weeklyTitle: '📊 Sifinyeto Seviki',
+    roomNotesTitle: '📝 Imininingwane Yekamelo',
+    customTitle: '⚙️ Lungisa Uhlelo',
+    today: 'Namuhla', yesterday: 'Itolo', tomorrow: 'Kusasa',
+    noLogs: 'Akukho tirekhodi letitfunjwe. Sitsintsela Phela Uhlelo ngemuva kwekulahlanta kamelo.',
+    complete: 'Kuphelele', partial: 'Kwengcenye', notStarted: 'Akukahhlantiwa',
+    supNote: 'Siphawulo Sesiphatsi', saveNote: 'Gcina Siphawulo',
+    clearAll: 'Susa Konkhe', deleteAll: 'Susa tonkhe tirekhodi?',
+    cancel: 'Yekela', yesDelete: 'Yebo, susa',
+    selectRoom: '⚠️ Sicela ukhethe inombolo yekamelo',
+    selectChalet: '⚠️ Sicela ukhethe inombolo ye-chalet',
+    enterName: '⚠️ Sicela ungenise libito lakho',
+    needBath: '⚠️ Sicela uhlole okungenani into yinye yegezelo',
+    needRoom: '⚠️ Sicela uhlole okungenani into yinye yekamelo',
+    needPatio: '⚠️ Sicela uhlole okungenani into yinye yepatio',
+    saved: 'Kulondvolotwe!', complete100: '✓ Kuphelele!',
+    signedOff: 'kuphatfwe ngemphumelelo',
+    missed: 'tinto letishiyiwe',
+    weekOf: 'Liviki laka',
+    roomsCompleted: 'Emakamelo Laphelele', avgCompletion: 'Umlinganiso Wekuphelela',
+    totalSubmissions: 'Tonkhe Tifakelo', incompleteRooms: 'Emakamelo Angaphelele',
+    topMissed: 'Tinto Letishiywa Kakhulu', noData: 'Akukho mininingwane yaleli viki.',
+    notePlaceholder: 'Ngeza siphawulo sesiphatsi…', noteSaved: '✓ Siphawulo silondvolotiwe',
+    confirmTitle: 'Kucinisekisa Kuphatfwa', confirmMsg: 'Uphatfa',
+    confirmMsg2: 'Unesiqiniseko?', confirmYes: '✓ Yebo, Faka', confirmNo: 'Buyela Emuva',
+    customAdd: 'Engeta Into', customSave: '✓ Gcina', customDelete: 'Susa',
+    customPlaceholder: 'Inchazelo yento leyintsha…', customSection: 'Sigaba',
+    customAdded: '✓ Into ingeniwe', customDeleted: 'Into isusiwe',
+    roomNotesNone: 'Akukho tiphawulo tekamelo leli.',
+    roomNotesSelect: 'Khetha ikamelo kubuke imininingwane yetiphawulo',
+    itemChecked: 'kuhlolwe',
+    menuLang: 'Lulwimi', menuDark: 'Imodi Emnyama', menuManager: 'Umphathi',
+    menuDashDesc: 'Simo sekamelo nechwalet lamuhla',
+    menuLogDesc: 'Imininingwane yonkhe yetifakelo',
+    menuWeeklyDesc: 'Imiphumela yeviki',
+    menuNotesDesc: 'Tiphawulo ngekamelo noma chwalet',
+    menuManageDesc: 'Engeta noma susa tinto',
+    customModeRooms: '🏨 Emakamelo', customModeChalets: '🏡 Emachwalet',
+    dashRooms: '🏨 Emakamelo', dashChalets: '🏡 Emachwalet',
+    filterAll: 'Konkhe', filterComplete: '✅ Kuphelele', filterIncomplete: '⚠️ Akuphelele',
+    searchPlaceholder: '🔍 Sesha ligama noma kamelo…',
+  }
+};
+
+let lang = localStorage.getItem('vakasha_lang') || 'en';
+let darkMode = localStorage.getItem('vakasha_dark') === 'true';
+
+function t(key) { return T[lang][key] || T.en[key] || key; }
+
+function applyLang() {
+  // Header
+  document.getElementById('hdr-sub').textContent = t('sub');
+  // Main checklist
+  const roomLblEl = document.getElementById('room-lbl'); if (roomLblEl) roomLblEl.textContent = t('roomLbl');
+  const chaletLblEl = document.getElementById('chalet-lbl'); if (chaletLblEl) chaletLblEl.textContent = t('chaletLbl');
+  const byLblEl = document.getElementById('by-lbl'); if (byLblEl) byLblEl.textContent = t('byLbl');
+  const progLblEl = document.getElementById('prog-lbl'); if (progLblEl) progLblEl.textContent = t('progLbl');
+  document.getElementById('tab-bath-lbl').textContent = t('tabBath');
+  document.getElementById('tab-room-lbl').textContent = t('tabRoom');
+  document.getElementById('tab-patio-lbl').textContent = t('tabPatio');
+  document.getElementById('sec-bath-clean').textContent = t('secBathClean');
+  document.getElementById('sec-bath-inv').textContent = t('secBathInv');
+  document.getElementById('sec-room-clean').textContent = t('secRoomClean');
+  document.getElementById('sec-room-inv').textContent = t('secRoomInv');
+  document.getElementById('sec-patio-clean').textContent = t('secPatioClean');
+  document.getElementById('notes-lbl-b').textContent = t('notesLbl');
+  document.getElementById('notes-lbl-r').textContent = t('notesLbl');
+  document.getElementById('notes-lbl-p').textContent = t('notesLbl');
+  document.getElementById('submit-btn').textContent = t('submitBtn');
+  // Mode switcher
+  const modeRoomBtn = document.getElementById('modeRoomBtn'); if (modeRoomBtn) modeRoomBtn.textContent = t('modeRooms');
+  const modeChaletBtn = document.getElementById('modeChaletBtn'); if (modeChaletBtn) modeChaletBtn.textContent = t('modeChalets');
+  // Screen titles
+  const dashTitleEl = document.getElementById('dash-title'); if (dashTitleEl) dashTitleEl.textContent = t('dashTitle');
+  const logTitleEl = document.getElementById('log-title'); if (logTitleEl) logTitleEl.textContent = t('logTitle');
+  const weeklyTitleEl = document.getElementById('weekly-title'); if (weeklyTitleEl) weeklyTitleEl.textContent = t('weeklyTitle');
+  const roomNotesTitleEl = document.getElementById('room-notes-title'); if (roomNotesTitleEl) roomNotesTitleEl.textContent = t('roomNotesTitle');
+  const customTitleEl = document.getElementById('custom-title'); if (customTitleEl) customTitleEl.textContent = t('customTitle');
+  // Log screen
+  const clearConfirmEl = document.getElementById('clear-confirm-lbl'); if (clearConfirmEl) clearConfirmEl.textContent = t('deleteAll');
+  const cancelEl = document.getElementById('cancel-lbl'); if (cancelEl) cancelEl.textContent = t('cancel');
+  const yesEl = document.getElementById('yes-lbl'); if (yesEl) yesEl.textContent = t('yesDelete');
+  const clearBtnEl = document.getElementById('clearBtn'); if (clearBtnEl) clearBtnEl.textContent = t('clearAll');
+  const customAddBtn = document.getElementById('custom-add-btn'); if (customAddBtn) customAddBtn.textContent = '+ ' + t('customAdd');
+  // Hamburger menu labels
+  const menuLangTitle = document.getElementById('menu-lang-title'); if (menuLangTitle) menuLangTitle.textContent = t('menuLang');
+  const menuDarkLbl = document.getElementById('menu-dark-lbl'); if (menuDarkLbl) menuDarkLbl.textContent = t('menuDark');
+  const menuMgrTitle = document.getElementById('menu-mgr-title'); if (menuMgrTitle) menuMgrTitle.textContent = t('menuManager');
+  const lblDash = document.getElementById('lbl-dashboard'); if (lblDash) lblDash.textContent = t('dashTitle').replace('🏠 ','');
+  const lblLog = document.getElementById('lbl-summary'); if (lblLog) lblLog.textContent = t('logTitle').replace('📋 ','');
+  const lblWeekly = document.getElementById('lbl-weekly'); if (lblWeekly) lblWeekly.textContent = t('weeklyTitle').replace('📊 ','');
+  const lblNotes = document.getElementById('lbl-notes'); if (lblNotes) lblNotes.textContent = t('roomNotesTitle').replace('📝 ','');
+  const lblCustom = document.getElementById('lbl-custom'); if (lblCustom) lblCustom.textContent = t('customTitle').replace('⚙️ ','');
+  // Menu item descriptions
+  const menuDescEls = {
+    'menu-desc-dashboard': 'menuDashDesc', 'menu-desc-log': 'menuLogDesc',
+    'menu-desc-weekly': 'menuWeeklyDesc', 'menu-desc-notes': 'menuNotesDesc',
+    'menu-desc-manage': 'menuManageDesc'
+  };
+  Object.entries(menuDescEls).forEach(([id, key]) => {
+    const el = document.getElementById(id); if (el) el.textContent = t(key);
+  });
+  // Lang button states
+  document.getElementById('langBtnEN').classList.toggle('active', lang === 'en');
+  document.getElementById('langBtnSS').classList.toggle('active', lang === 'ss');
+  document.getElementById('langBtnEN2').classList.toggle('active', lang === 'en');
+  document.getElementById('langBtnSS2').classList.toggle('active', lang === 'ss');
+  ['db','su','wk','rn','cx','pin'].forEach(sid => {
+    const enBtn = document.getElementById('sl-en-' + sid);
+    const ssBtn = document.getElementById('sl-ss-' + sid);
+    if (enBtn) enBtn.classList.toggle('active', lang === 'en');
+    if (ssBtn) ssBtn.classList.toggle('active', lang === 'ss');
+  });
+  updateDateDisplay();
+}
+
+function setLang(newLang) {
+  lang = newLang;
+  localStorage.setItem('vakasha_lang', lang);
+  applyLang();
+  renderAll();
+}
+
+function applyDark() {
+  document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+  const sw = document.getElementById('darkToggleSwitch');
+  if (sw) sw.classList.toggle('on', darkMode);
+}
+
+function toggleDark() {
+  darkMode = !darkMode;
+  localStorage.setItem('vakasha_dark', darkMode);
+  applyDark();
+}
+
+// ── HAMBURGER MENU ──
+function toggleMenu() {
+  const menu = document.getElementById('hamburgerMenu');
+  const overlay = document.getElementById('menuOverlay');
+  const btn = document.getElementById('hamburgerBtn');
+  const isOpen = menu.classList.contains('open');
+  menu.classList.toggle('open', !isOpen);
+  overlay.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+}
+
+function closeMenu() {
+  document.getElementById('hamburgerMenu').classList.remove('open');
+  document.getElementById('menuOverlay').classList.remove('open');
+  document.getElementById('hamburgerBtn').classList.remove('open');
+}
+
+// ── DATA ──
+const DATA_EN = {
+  'bathroom-clean': [
+    'Shower glass cleaned and free of marks','Shower floor cleaned and free of dirt',
+    'Shower walls cleaned and free of dirt','Shower gel holder cleaned',
+    'Shower head cleaned and functioning','Shower drain cleaned and not blocked',
+    'Towel rail cleaned','Toilet basin cleaned','Toilet brush cleaned',
+    'Complete toilet cleaned on all surfaces (including back)','Mirror cleaned and free of marks',
+    'Bin cleaned with lining inserted','Sink cleaned and free of dirt',
+    'Sink cleaned and free of dirt incl ceramics','Hand towel holder cleaned',
+    'Bathroom window and window sill cleaned and free of marks',
+    'Bathroom door clear of dirt and marks','Entire bathroom floor cleaned and mopped',
+  ],
+  'bathroom-inv': [
+    {qty:'1x',item:'Shower gel holder'},{qty:'1x',item:'Shower gel'},{qty:'1x',item:'Shampoo'},
+    {qty:'1x',item:'Toilet brush and holder'},{qty:'1x',item:'Toilet bin'},
+    {qty:'2x',item:'Fresh toilet rolls (2ply)'},{qty:'1x',item:'Towel rail'},
+    {qty:'1x',item:'Toilet roll holder'},{qty:'1x',item:'Air freshener'},
+    {qty:'1x',item:'Soap dispenser left of sink tap'},{qty:'1x',item:'Hand towel – no tags visible'},
+    {qty:'1x',item:'Mirror'},{qty:'1x',item:'Hand towel holder'},{qty:'1x',item:'Plant'},
+    {qty:'1x',item:'Bathroom mat (white) – no tags visible'},{qty:'1x',item:'Sink plug right of sink tap'},
+  ],
+  'room-clean': [
+    'Sliding door cleaned and free of marks','Connecting room door cleaned and free of dirt and marks',
+    'Room mirror cleaned and free of marks','Room mirror frame cleaned and free of dust',
+    'Dressing table cleaned including drawers (free of dirt and dust)','Fridge cleaned',
+    'Portrait cleaned and free of dust','Closet cleaned and free of dust (all surfaces and shelving)',
+    'All light switches cleaned and free of dust',
+    'Bed side tables cleaned (including draws) and free of dirt',
+    'Bed side lamps cleaned and free of dust',
+    'Entire bedroom floor cleaned (including underneath of bed, fridge and bedside tables)',
+    'Bathroom door clear of dirt and marks','Curtains in good and clean condition',
+    'TV dusted and functioning','Floor mats cleaned and presentable','Aircon functioning',
+    'Fresh bedding (clear of dirt and marks)',
+    'Entire floor cleaned (incl underneath of bed, side tables, dressing table, fridge etc)',
+  ],
+  'room-inv': [
+    {qty:'1x',item:'Aircon remote on holder'},{qty:'1x',item:'TV remote on dressing table'},
+    {qty:'1x',item:'Dressing table'},{qty:'1x',item:'Fridge'},{qty:'1x',item:'Portrait'},
+    {qty:'2x',item:'Bed side lamps'},{qty:'1x',item:'Doom'},{qty:'1x',item:'Adaptor on TV plug'},
+    {qty:'2x',item:'Bed pillows'},{qty:'1x',item:'Duvet'},{qty:'1x',item:'Mattress protector'},
+    {qty:'2x',item:'Towels on bed (no tags visible)'},{qty:'2x',item:'Extensions for bed side lamps'},
+    {qty:'2x',item:'Patio furniture and 1x patio side table'},
+  ],
+  'patio-clean': ['Entire patio cleaned and mopped','Sliding door cleaned and free of marks'],
+};
+
+const DATA_SS = {
+  'bathroom-clean': [
+    'Ingilasi yeshawa ihlanjwe futsi ikhululekile ekushayeni','Phansi leshawa lihlanjwe futsi likhululekile ebudakini',
+    'Tindonga teshawa tihlanjwe futsi tikhululekile ebudakini','Sibambi segeli yeshawa sihlanjwe',
+    'Inhloko yeshawa ihlanjwe futsi isebenta','Umgodi weshawa uhlanjwe futsi awuvaliwe',
+    'Umgodo wetawuli uhlanjwe','Ibhesini letigayo lihlanjwe','Sibhulashi setigayo sihlanjwe',
+    'Tigayo tihlanjwe tonkhe tindzawo (kufaka ngemuva)','Sibuko sihlanjwe futsi sikhululekile ekushayeni',
+    'Ibhini lihlanjwe nelining lelinfakiwe','Umgodzi uhlanjwe futsi ukhululekile ebudakini',
+    'Umgodzi uhlanjwe kufaka tinsimbi','Sibambi setawuli yesandla sihlanjwe',
+    'Ifasitelo legezelo kanye newindow sill kuhlanjwe futsi kukhululekile ekushayeni',
+    'Umnyango wegezelo ukhululekile ebudakini nasekushayeni','Phansi lonkhe legezelo lihlanjwe futsi livunjiwe',
+  ],
+  'bathroom-inv': [
+    {qty:'1x',item:'Sibambi segeli yeshawa'},{qty:'1x',item:'Geli yeshawa'},{qty:'1x',item:'Shampu'},
+    {qty:'1x',item:'Sibhulashi setigayo nesibambi saso'},{qty:'1x',item:'Ibhini letigayo'},
+    {qty:'2x',item:'Emaculo etishyu lamatsha (2ply)'},{qty:'1x',item:'Umgodo wetawuli'},
+    {qty:'1x',item:'Sibambi setishyu setigayo'},{qty:'1x',item:'Siphetfuli semoya'},
+    {qty:'1x',item:'Sibhidli sesefo ekhohlo kwetap'},{qty:'1x',item:'Tawuli yesandla – kungabonakali titeki'},
+    {qty:'1x',item:'Sibuko'},{qty:'1x',item:'Sibambi setawuli yesandla'},{qty:'1x',item:'Sitjalo'},
+    {qty:'1x',item:'Umati wegezelo (mhlophe) – kungabonakali titeki'},{qty:'1x',item:'Isivalo somgodzi ekunene kwetap'},
+  ],
+  'room-clean': [
+    'Umnyango loshelako uhlanjwe futsi ukhululekile ekushayeni','Umnyango lohlanganisa emakamelo uhlanjwe futsi ukhululekile',
+    'Sibuko sekamelo sihlanjwe futsi sikhululekile ekushayeni','Sifreme sesibuko sekamelo sihlanjwe futsi sikhululekile etfulweni',
+    'Itafula lokugqoka lihlanjwe kufaka emadrowa (likhululekile ebudakini nassetfulweni)','Ifiriji lihlanjwe',
+    'Isithombe sihlanjwe futsi sikhululekile etfulweni','Ikhabethe lihlanjwe futsi likhululekile etfulweni (tonkhe tindzawo)',
+    'Tonkhe tikhiye teligesi tihlanjwe futsi tikhululekile etfulweni',
+    'Ematafula eceleni kwembhede ahlanjwe (kufaka emadrowa) futsi akhululekile ebudakini',
+    'Tilambu eceleni kwembhede tihlanjwe futsi tikhululekile etfulweni',
+    'Phansi lonkhe lekamelo lihlanjwe (kufaka ngaphansi kwembhede, ifiriji netafula eceleni)',
+    'Umnyango wegezelo ukhululekile ebudakini nasekushayeni','Emaketini asesimeni lesihlungu futsi ahlobile',
+    'TV ikhishwe itfuli futsi isebenta','Emahhemu aphansi ahlanjwe futsi abonakala kahle','Umoya osebenta',
+    'Imicucwana yembhede lematsha (ikhululekile ebudakini nasekushayeni)',
+    'Phansi lonkhe lihlanjwe (kufaka ngaphansi kwembhede, ematafula eceleni, itafula lokugqoka, ifiriji)',
+  ],
+  'room-inv': [
+    {qty:'1x',item:'Rimothe ye-aircon esibambini sayo'},{qty:'1x',item:'Rimothe ye-TV etafuleni lokugqoka'},
+    {qty:'1x',item:'Itafula lokugqoka'},{qty:'1x',item:'Ifiriji'},{qty:'1x',item:'Isithombe'},
+    {qty:'2x',item:'Tilambu eceleni kwembhede'},{qty:'1x',item:'Doom'},{qty:'1x',item:'Adapta ku-TV plug'},
+    {qty:'2x',item:'Emacushini embhede'},{qty:'1x',item:'Iduvet'},{qty:'1x',item:'Sivikelo semattress'},
+    {qty:'2x',item:'Ematawuli embhede (kungabonakali titeki)'},{qty:'2x',item:'Tindlela tetilambu eceleni kwembhede'},
+    {qty:'2x',item:'Tifanelo tepatiyo ne-1x itafula lepatiyo'},
+  ],
+  'patio-clean': ['Patiyo yonkhe ihlanjwe futsi ivunjiwe','Umnyango loshelako uhlanjwe futsi ukhululekile ekushayeni'],
+};
+
+function getData() { return lang === 'ss' ? DATA_SS : DATA_EN; }
+const DATA = DATA_EN; // kept for Telegram/log references (always English)
+
+const TELEGRAM_TOKEN = '8746069250:AAEFiL3eSrmmTvqMaa8LifMgbvokm_4KgIg';
+const TELEGRAM_CHAT_ID = '-5049948052';
+
+// ── DATE ──
+function toDateStr(d) { return d.toISOString().slice(0,10); }
+// ── MODE (Room / Chalet) ──
+let currentMode = 'room';
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.getElementById('modeRoomBtn').classList.toggle('active', mode === 'room');
+  document.getElementById('modeChaletBtn').classList.toggle('active', mode === 'chalet');
+  document.getElementById('roomField').style.display = mode === 'room' ? '' : 'none';
+  document.getElementById('chaletField').style.display = mode === 'chalet' ? '' : 'none';
+  allKeys().forEach(k => delete state[k]);
+  saveState();
+  document.getElementById('notes-bathroom').value = '';
+  document.getElementById('notes-room').value = '';
+  document.getElementById('notes-patio').value = '';
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-bathroom').classList.add('active');
+  document.getElementById('tab-bathroom-btn').classList.add('active');
+  renderAll();
+}
+
+function getCurrentUnit() {
+  if (currentMode === 'chalet') return { label: 'Chalet', value: document.getElementById('chaletNum').value };
+  return { label: 'Room', value: document.getElementById('roomNum').value };
+}
+
+function getModePrefix() { return currentMode === 'chalet' ? 'CH' : 'RM'; }
+
+let currentDate = new Date();
+let currentDay = toDateStr(currentDate);
+let state = loadState();
+
+function loadState() { try { return JSON.parse(localStorage.getItem('vakasha_state') || '{}'); } catch(e) { return {}; } }
+function saveState() { localStorage.setItem('vakasha_state', JSON.stringify(state)); }
+function dayKey(day, list, idx) { return getModePrefix() + '__' + day + '__' + list + '__' + idx; }
+
+function formatDateMain(d) { return d.toLocaleDateString('en-GB', {weekday:'long',day:'numeric',month:'long'}); }
+function formatDateSub(d) {
+  const today = toDateStr(new Date());
+  const ds = toDateStr(d);
+  if (ds === today) return t('today');
+  const yest = new Date(); yest.setDate(yest.getDate()-1);
+  if (ds === toDateStr(yest)) return t('yesterday');
+  const tom = new Date(); tom.setDate(tom.getDate()+1);
+  if (ds === toDateStr(tom)) return t('tomorrow');
+  return d.toLocaleDateString('en-GB', {year:'numeric'});
+}
+
+function updateDateDisplay() {
+  document.getElementById('dateMain').textContent = formatDateMain(currentDate);
+  document.getElementById('dateSub').textContent = formatDateSub(currentDate);
+  currentDay = toDateStr(currentDate);
+}
+
+function shiftDate(delta) {
+  // Disabled — only today is allowed
+}
+
+function openDatePicker() {
+  // Disabled — only today is allowed
+  showToast('Only today\'s date can be selected');
+}
+
+function onDatePicked(val) {
+  // Disabled — only today is allowed
+}
+
+// ── RENDER ──
+function buildCheckItem(text, key, listEl) {
+  const el = document.createElement('div');
+  el.className = 'check-item' + (state[key] ? ' checked' : '');
+  el.innerHTML = '<div class="custom-checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-label">' + text + '</span>';
+  el.onclick = () => { state[key] = !state[key]; el.classList.toggle('checked', state[key]); saveState(); updateProgress(); vibrateCheck(); };
+  listEl.appendChild(el);
+}
+
+function buildInvItem(qty, item, key, listEl) {
+  const el = document.createElement('div');
+  el.className = 'inv-item' + (state[key] ? ' checked' : '');
+  el.innerHTML = '<div class="custom-checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="inv-qty">' + qty + '</span><span class="item-label">' + item + '</span>';
+  el.onclick = () => { state[key] = !state[key]; el.classList.toggle('checked', state[key]); saveState(); updateProgress(); vibrateCheck(); };
+  listEl.appendChild(el);
+}
+
+function renderAll() {
+  const D = getData();
+  ['bathroom-clean','bathroom-inv','room-clean','room-inv','patio-clean'].forEach(id => {
+    document.getElementById('list-' + id).innerHTML = '';
+  });
+  D['bathroom-clean'].forEach((item,i) => buildCheckItem(item, dayKey(currentDay,'bc',i), document.getElementById('list-bathroom-clean')));
+  D['bathroom-inv'].forEach((o,i) => buildInvItem(o.qty, o.item, dayKey(currentDay,'bi',i), document.getElementById('list-bathroom-inv')));
+  D['room-clean'].forEach((item,i) => buildCheckItem(item, dayKey(currentDay,'rc',i), document.getElementById('list-room-clean')));
+  D['room-inv'].forEach((o,i) => buildInvItem(o.qty, o.item, dayKey(currentDay,'ri',i), document.getElementById('list-room-inv')));
+  D['patio-clean'].forEach((item,i) => buildCheckItem(item, dayKey(currentDay,'pc',i), document.getElementById('list-patio-clean')));
+  updateProgress();
+}
+
+function allKeys() {
+  const keys = [];
+  DATA['bathroom-clean'].forEach((_,i) => keys.push(dayKey(currentDay,'bc',i)));
+  DATA['bathroom-inv'].forEach((_,i) => keys.push(dayKey(currentDay,'bi',i)));
+  DATA['room-clean'].forEach((_,i) => keys.push(dayKey(currentDay,'rc',i)));
+  DATA['room-inv'].forEach((_,i) => keys.push(dayKey(currentDay,'ri',i)));
+  DATA['patio-clean'].forEach((_,i) => keys.push(dayKey(currentDay,'pc',i)));
+  return keys;
+}
+
+function updateProgress() {
+  const keys = allKeys();
+  const done = keys.filter(k => state[k]).length;
+  const pct = keys.length ? Math.round(done/keys.length*100) : 0;
+  document.getElementById('progressText').textContent = done + ' / ' + keys.length + ' complete';
+  document.getElementById('progressFill').style.width = pct + '%';
+  const bathroomDone = DATA['bathroom-clean'].some((_,i) => state[dayKey(currentDay,'bc',i)]) || DATA['bathroom-inv'].some((_,i) => state[dayKey(currentDay,'bi',i)]);
+  const roomDone = DATA['room-clean'].some((_,i) => state[dayKey(currentDay,'rc',i)]) || DATA['room-inv'].some((_,i) => state[dayKey(currentDay,'ri',i)]);
+  const patioDone = DATA['patio-clean'].some((_,i) => state[dayKey(currentDay,'pc',i)]);
+  document.getElementById('tab-bathroom-btn').classList.toggle('tab-done', bathroomDone);
+  document.getElementById('tab-room-btn').classList.toggle('tab-done', roomDone);
+  document.getElementById('tab-patio-btn').classList.toggle('tab-done', patioDone);
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── SUBMIT ──
+// (submitChecklist is defined above with confirmation modal)
+
+function resetChecklist() {
+  allKeys().forEach(k => delete state[k]);
+  saveState();
+  document.getElementById('notes-bathroom').value = '';
+  document.getElementById('notes-room').value = '';
+  document.getElementById('notes-patio').value = '';
+  document.getElementById('roomNum').value = '';
+  document.getElementById('chaletNum').value = '';
+  document.getElementById('checkedBy').value = '';
+  localStorage.removeItem('vakasha_room');
+  localStorage.removeItem('vakasha_name');
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-bathroom').classList.add('active');
+  document.getElementById('tab-bathroom-btn').classList.add('active');
+  renderAll();
+}
+
+// ── TELEGRAM ──
+function sendTelegram(room, unitLabel, name, day, done, total, notes) {
+  const pct = Math.round(done/total*100);
+  const status = pct === 100 ? '✅ FULLY COMPLETE' : '⚠️ PARTIALLY COMPLETE';
+  const unitStr = (unitLabel || 'Room') + ' ' + room;
+  const sections = [
+    {label:'Bathroom Cleaning', items:DATA['bathroom-clean'], prefix:'bc'},
+    {label:'Bathroom Inventory', items:DATA['bathroom-inv'].map(o=>o.qty+' '+o.item), prefix:'bi'},
+    {label:'Room Cleaning', items:DATA['room-clean'], prefix:'rc'},
+    {label:'Room Inventory', items:DATA['room-inv'].map(o=>o.qty+' '+o.item), prefix:'ri'},
+    {label:'Patio', items:DATA['patio-clean'], prefix:'pc'},
+  ];
+  let itemLines = '';
+  sections.forEach(s => {
+    const missed = s.items.filter((_,i) => !state[dayKey(currentDay,s.prefix,i)]);
+    if (missed.length > 0) { itemLines += '\n─────────────────\n📂 ' + s.label + '\n'; missed.forEach(i => { itemLines += '  ❌ ' + i + '\n'; }); }
+  });
+  if (!itemLines) itemLines = '\n─────────────────\n✅ All items completed!';
+  const allNotes = [notes.bathroom, notes.room, notes.patio].filter(Boolean).join(' | ');
+  const notesLine = allNotes ? '\n─────────────────\n📝 Notes: ' + allNotes : '';
+  const msg = status + '\n\n🏨 ' + unitStr + '\n👤 Signed off by: ' + name + '\n📅 Date: ' + day + '\n✔️ Score: ' + done + '/' + total + ' (' + pct + '%)' + itemLines + notesLine;
+  fetch('https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/sendMessage', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID, text:msg})}).catch(()=>{ offlineQueue.push(msg); saveQueue(); });
+}
+
+// ── LOG ──
+function saveToLog(room, unitLabel, name, day, done, total, notes) {
+  const logs = loadLogs();
+  const sections = [
+    {label:'Bathroom Cleaning', items:DATA['bathroom-clean'], prefix:'bc'},
+    {label:'Bathroom Inventory', items:DATA['bathroom-inv'].map(o=>o.qty+' '+o.item), prefix:'bi'},
+    {label:'Room Cleaning', items:DATA['room-clean'], prefix:'rc'},
+    {label:'Room Inventory', items:DATA['room-inv'].map(o=>o.qty+' '+o.item), prefix:'ri'},
+    {label:'Patio', items:DATA['patio-clean'], prefix:'pc'},
+  ];
+  const checkedSections = sections.map(s => ({
+    label: s.label,
+    checked: s.items.filter((_,i) => state[dayKey(currentDay,s.prefix,i)]),
+    missed: s.items.filter((_,i) => !state[dayKey(currentDay,s.prefix,i)]),
+  }));
+  const entry = {id:Date.now(), date:day, dateStr:toDateStr(currentDate), room, unitLabel: unitLabel||'Room', name, done, total, pct:Math.round(done/total*100), sections:checkedSections, notes, time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}), supervisorNote:''};
+  logs.unshift(entry);
+  localStorage.setItem('vakasha_logs', JSON.stringify(logs));
+}
+
+function loadLogs() { try { return JSON.parse(localStorage.getItem('vakasha_logs') || '[]'); } catch(e) { return []; } }
+
+function saveSupervisorNote(id, note) {
+  const logs = loadLogs();
+  const entry = logs.find(l => l.id === id);
+  if (entry) { entry.supervisorNote = note; localStorage.setItem('vakasha_logs', JSON.stringify(logs)); showToast(t('noteSaved')); }
+}
+
+// ── SUMMARY ──
+// ── 4. LOG FILTER STATE ──
+let logFilter = 'all'; // 'all', 'complete', 'incomplete'
+let logSearch = '';
+
+function setLogFilter(f) {
+  logFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('filter-' + f).classList.add('active');
+  renderSummary();
+}
+
+function openSummary() {
+  autoClearOldLogs(); // 6. auto-clear on open
+  renderSummary();
+  document.getElementById('summaryScreen').classList.add('open');
+}
+function closeSummary() { document.getElementById('summaryScreen').classList.remove('open'); }
+function confirmClear() { document.getElementById('clearConfirm').style.display = 'flex'; }
+function cancelClear() { document.getElementById('clearConfirm').style.display = 'none'; }
+function doClear() { localStorage.removeItem('vakasha_logs'); document.getElementById('clearConfirm').style.display = 'none'; renderSummary(); }
+
+function renderSummary() {
+  let logs = loadLogs();
+  const body = document.getElementById('summaryBody');
+
+  // Build filter bar HTML
+  const filterBar = '<div class="log-filter-bar">' +
+    '<button class="filter-btn' + (logFilter==='all'?' active':'') + '" id="filter-all" onclick="setLogFilter(\'all\')">All</button>' +
+    '<button class="filter-btn' + (logFilter==='complete'?' active':'') + '" id="filter-complete" onclick="setLogFilter(\'complete\')">✅ Complete</button>' +
+    '<button class="filter-btn' + (logFilter==='incomplete'?' active':'') + '" id="filter-incomplete" onclick="setLogFilter(\'incomplete\')">⚠️ Incomplete</button>' +
+    '<input class="filter-input" placeholder="🔍 Search name or room…" oninput="logSearch=this.value;renderSummary()" value="' + logSearch + '">' +
+  '</div>';
+
+  // Apply filters
+  if (logFilter === 'complete') logs = logs.filter(l => l.pct === 100);
+  if (logFilter === 'incomplete') logs = logs.filter(l => l.pct < 100);
+  if (logSearch) {
+    const q = logSearch.toLowerCase();
+    logs = logs.filter(l => l.name.toLowerCase().includes(q) || String(l.room).includes(q) || (l.unitLabel||'').toLowerCase().includes(q));
+  }
+
+  if (logs.length === 0) {
+    body.innerHTML = filterBar + '<div class="summary-empty"><span>📋</span>' + t('noLogs') + '</div>';
+    return;
+  }
+  body.innerHTML = filterBar + logs.map(entry => {
+    const isIncomplete = entry.pct < 100;
+    const scoreClass = entry.pct === 100 ? '' : entry.pct >= 50 ? 'partial' : 'incomplete-badge';
+    const cardClass = isIncomplete ? 'log-card incomplete' : 'log-card';
+    const missedHTML = entry.sections.map(s => {
+      if (!s.missed || s.missed.length === 0) return '';
+      return '<div class="log-section-title">' + s.label + '</div><div class="log-items">' + s.missed.map(i => '<span class="log-tag missed">✗ ' + i + '</span>').join('') + '</div>';
+    }).join('');
+    const allNotes = [entry.notes.bathroom, entry.notes.room, entry.notes.patio].filter(Boolean).join(' · ');
+    const notesHTML = allNotes ? '<div class="log-notes">📝 ' + allNotes + '</div>' : '';
+    const supNoteHTML = '<div class="supervisor-note-area"><label>' + t('supNote') + '</label>' +
+      (entry.supervisorNote ? '<div class="supervisor-note-display">💬 ' + entry.supervisorNote + '</div>' : '') +
+      '<textarea class="supervisor-note-input" id="sn' + entry.id + '" placeholder="' + t('notePlaceholder') + '">' + (entry.supervisorNote || '') + '</textarea>' +
+      '<button class="supervisor-note-save" onclick="saveSupervisorNote(' + entry.id + ', document.getElementById(\'sn' + entry.id + '\').value); renderSummary();">' + t('saveNote') + '</button></div>';
+    return '<div class="' + cardClass + '"><div class="log-card-header"><span class="log-room">' + (entry.unitLabel||'Room') + ' ' + entry.room + '</span><span class="log-meta">' + entry.date + '<br>' + entry.time + ' · ' + entry.name + '</span></div>' +
+      '<div class="log-card-body"><span class="log-score ' + scoreClass + '">' + entry.pct + '% · ' + entry.done + '/' + entry.total + ' items</span>' + missedHTML + notesHTML + supNoteHTML + '</div></div>';
+  }).join('');
+}
+
+// ── 6. AUTO-CLEAR LOGS OLDER THAN 30 DAYS ──
+function autoClearOldLogs() {
+  const logs = loadLogs();
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 30);
+  const cutoffStr = cutoff.toISOString().slice(0, 10);
+  const filtered = logs.filter(l => l.dateStr >= cutoffStr);
+  if (filtered.length < logs.length) {
+    localStorage.setItem('vakasha_logs', JSON.stringify(filtered));
+  }
+}
+
+// ── 8. CONGRATULATIONS ──
+function showCongratsOverlay(room, unitLabel) {
+  const messages = [
+    'Every item checked — excellent work! 🌟',
+    'Perfect score! The guests will love it. 🏆',
+    'Spotless! 100% complete. Well done! ✨',
+    'Outstanding effort — 100% clean! 🎊',
+  ];
+  const msg = messages[Math.floor(Math.random() * messages.length)];
+  document.getElementById('congratsTitle').textContent = (unitLabel||'Room') + ' ' + room + ' — Complete!';
+  document.getElementById('congratsMsg').textContent = msg;
+  document.getElementById('congratsOverlay').classList.add('show');
+  setTimeout(() => closeCongratsOverlay(), 3000);
+}
+
+function closeCongratsOverlay() {
+  document.getElementById('congratsOverlay').classList.remove('show');
+}
+
+// ── DASHBOARD ──
+function openDashboard() { renderDashboard(); document.getElementById('dashboardScreen').classList.add('open'); }
+function closeDashboard() { document.getElementById('dashboardScreen').classList.remove('open'); }
+
+function renderDashboard() {
+  document.getElementById('dashDate').textContent = formatDateMain(currentDate);
+  const logs = loadLogs().filter(l => l.dateStr === toDateStr(currentDate));
+  const grid = document.getElementById('dashGrid');
+  grid.innerHTML = '';
+
+  // ── ROOMS section ──
+  const roomsHeader = document.createElement('div');
+  roomsHeader.style.cssText = 'grid-column:1/-1;font-family:Playfair Display,serif;font-size:0.9rem;color:var(--sage-dark);padding:8px 0 4px;border-bottom:1px solid var(--cream-dark);margin-bottom:4px;';
+  roomsHeader.textContent = '🏨 Rooms';
+  grid.appendChild(roomsHeader);
+
+  for (let r = 1; r <= 18; r++) {
+    const entry = logs.find(l => l.room == r && (l.unitLabel === 'Room' || !l.unitLabel));
+    let cls = 'room-tile', icon = '⬜', status = t('notStarted');
+    if (entry) {
+      if (entry.pct === 100) { cls += ' complete'; icon = '✅'; status = t('complete'); }
+      else { cls += ' partial'; icon = '⚠️'; status = entry.pct + '%'; }
+    }
+    const tile = document.createElement('div');
+    tile.className = cls;
+    tile.innerHTML = '<span class="room-tile-icon">' + icon + '</span><span class="room-tile-num">Room ' + r + '</span><span class="room-tile-status">' + status + '</span>';
+    if (entry) tile.onclick = () => { closeDashboard(); openSummary(); };
+    grid.appendChild(tile);
+  }
+
+  // ── CHALETS section ──
+  const chaletsHeader = document.createElement('div');
+  chaletsHeader.style.cssText = 'grid-column:1/-1;font-family:Playfair Display,serif;font-size:0.9rem;color:var(--sage-dark);padding:12px 0 4px;border-bottom:1px solid var(--cream-dark);margin-bottom:4px;';
+  chaletsHeader.textContent = '🏡 Chalets';
+  grid.appendChild(chaletsHeader);
+
+  for (let c = 1; c <= 4; c++) {
+    const entry = logs.find(l => l.room == c && l.unitLabel === 'Chalet');
+    let cls = 'room-tile', icon = '⬜', status = t('notStarted');
+    if (entry) {
+      if (entry.pct === 100) { cls += ' complete'; icon = '✅'; status = t('complete'); }
+      else { cls += ' partial'; icon = '⚠️'; status = entry.pct + '%'; }
+    }
+    const tile = document.createElement('div');
+    tile.className = cls;
+    tile.innerHTML = '<span class="room-tile-icon">' + icon + '</span><span class="room-tile-num">Chalet ' + c + '</span><span class="room-tile-status">' + status + '</span>';
+    if (entry) tile.onclick = () => { closeDashboard(); openSummary(); };
+    grid.appendChild(tile);
+  }
+}
+
+// ── WEEKLY ──
+let weekOffset = 0;
+function openWeekly() { weekOffset = 0; renderWeekly(); document.getElementById('weeklyScreen').classList.add('open'); }
+function closeWeekly() { document.getElementById('weeklyScreen').classList.remove('open'); }
+
+function getWeekRange(offset) {
+  const now = new Date();
+  const day = now.getDay() || 7;
+  const mon = new Date(now); mon.setDate(now.getDate() - day + 1 + (offset * 7));
+  const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+  return { mon, sun };
+}
+
+function renderWeekly() {
+  const { mon, sun } = getWeekRange(weekOffset);
+  const monStr = toDateStr(mon), sunStr = toDateStr(sun);
+  const logs = loadLogs().filter(l => l.dateStr >= monStr && l.dateStr <= sunStr);
+  const body = document.getElementById('weeklyBody');
+  const weekLabel = mon.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) + ' – ' + sun.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+
+  const totalSubmissions = logs.length;
+  const completedRooms = logs.filter(l => l.pct === 100).length;
+  const incompleteRooms = logs.filter(l => l.pct < 100).length;
+  const avgPct = totalSubmissions ? Math.round(logs.reduce((a,l) => a + l.pct, 0) / totalSubmissions) : 0;
+
+  // Most missed items
+  const missedCount = {};
+  logs.forEach(l => { l.sections.forEach(s => { s.missed.forEach(item => { missedCount[item] = (missedCount[item] || 0) + 1; }); }); });
+  const topMissed = Object.entries(missedCount).sort((a,b) => b[1]-a[1]).slice(0, 5);
+
+  const isCurrentWeek = weekOffset === 0;
+
+  body.innerHTML = '<div class="week-nav">' +
+    '<button class="week-nav-btn" onclick="weekOffset--;renderWeekly()">&#8592;</button>' +
+    '<span class="week-nav-label">' + weekLabel + '</span>' +
+    '<button class="week-nav-btn" onclick="weekOffset++;renderWeekly()" ' + (isCurrentWeek ? 'disabled style="opacity:0.3"' : '') + '>&#8594;</button>' +
+    '</div>' +
+    '<div class="weekly-stat-grid">' +
+      '<div class="stat-card"><span class="stat-num">' + completedRooms + '</span><span class="stat-label">' + t('roomsCompleted') + '</span></div>' +
+      '<div class="stat-card"><span class="stat-num">' + avgPct + '%</span><span class="stat-label">' + t('avgCompletion') + '</span></div>' +
+      '<div class="stat-card"><span class="stat-num">' + totalSubmissions + '</span><span class="stat-label">' + t('totalSubmissions') + '</span></div>' +
+      '<div class="stat-card"><span class="stat-num" style="color:var(--danger)">' + incompleteRooms + '</span><span class="stat-label">' + t('incompleteRooms') + '</span></div>' +
+    '</div>' +
+    '<p class="section-title">' + t('topMissed') + '</p>' +
+    (topMissed.length === 0 ? '<div style="color:var(--warm-gray);font-size:0.85rem;padding:12px 0">' + t('noData') + '</div>' :
+      topMissed.map(([item, count]) => '<div class="missed-item-row"><span>' + item + '</span><span class="miss-count">' + count + 'x</span></div>').join(''));
+}
+
+// ── CONFIRMATION MODAL ──
+let pendingSubmitData = null;
+
+function submitChecklist() {
+  const keys = allKeys();
+  const done = keys.filter(k => state[k]).length;
+  const pct = keys.length ? Math.round(done/keys.length*100) : 0;
+  const unit = getCurrentUnit();
+  const room = unit.value;
+  const unitLabel = unit.label;
+  const name = document.getElementById('checkedBy').value.trim();
+  const day = formatDateMain(currentDate);
+  const unitFieldId = currentMode === 'chalet' ? 'chaletNum' : 'roomNum';
+
+  if (!room) {
+    document.getElementById(unitFieldId).classList.add('field-error');
+    setTimeout(() => document.getElementById(unitFieldId).classList.remove('field-error'), 1500);
+    showToast(currentMode === 'chalet' ? '⚠️ Please select a chalet number' : t('selectRoom'));
+    return;
+  }
+  if (!name) { document.getElementById('checkedBy').classList.add('field-error'); setTimeout(() => document.getElementById('checkedBy').classList.remove('field-error'), 1500); showToast(t('enterName')); return; }
+
+  const bathroomDone = DATA['bathroom-clean'].some((_,i) => state[dayKey(currentDay,'bc',i)]) || DATA['bathroom-inv'].some((_,i) => state[dayKey(currentDay,'bi',i)]);
+  const roomDone = DATA['room-clean'].some((_,i) => state[dayKey(currentDay,'rc',i)]) || DATA['room-inv'].some((_,i) => state[dayKey(currentDay,'ri',i)]);
+  const patioDone = DATA['patio-clean'].some((_,i) => state[dayKey(currentDay,'pc',i)]);
+  if (!bathroomDone) { showToast(t('needBath')); return; }
+  if (!roomDone) { showToast(t('needRoom')); return; }
+  if (!patioDone) { showToast(t('needPatio')); return; }
+
+  const notes = { bathroom: document.getElementById('notes-bathroom').value, room: document.getElementById('notes-room').value, patio: document.getElementById('notes-patio').value };
+  pendingSubmitData = { room, unitLabel, name, day, done, total: keys.length, pct, notes };
+
+  document.getElementById('confirm-title').textContent = t('confirmTitle');
+  document.getElementById('confirm-msg').textContent = t('confirmMsg');
+  document.getElementById('confirm-room').textContent = unitLabel + ' ' + room + ' — ' + name;
+  const scoreEl = document.getElementById('confirm-score');
+  scoreEl.textContent = done + '/' + keys.length + ' items (' + pct + '%)';
+  scoreEl.className = 'modal-score' + (pct < 100 ? ' partial' : '');
+  document.getElementById('confirm-msg2').textContent = t('confirmMsg2');
+  document.getElementById('confirm-yes').textContent = t('confirmYes');
+  document.getElementById('confirm-no').textContent = t('confirmNo');
+  document.getElementById('confirmModal').classList.add('open');
+}
+
+function closeConfirm() {
+  document.getElementById('confirmModal').classList.remove('open');
+  pendingSubmitData = null;
+}
+
+function confirmSubmit() {
+  if (!pendingSubmitData) return;
+  const { room, unitLabel, name, day, done, total, notes } = pendingSubmitData;
+  document.getElementById('confirmModal').classList.remove('open');
+  saveToLog(room, unitLabel || 'Room', name, day, done, total, notes);
+  sendTelegram(room, unitLabel || 'Room', name, day, done, total, notes);
+  vibrate();
+  const pct = Math.round(done/total*100);
+  if (pct === 100) {
+    setTimeout(() => showCongratsOverlay(room, unitLabel || 'Room'), 400);
+  } else {
+    showToast(t('saved') + ' ' + pct + '% (' + (total-done) + ' ' + t('missed') + ')');
+  }
+  pendingSubmitData = null;
+  setTimeout(() => resetChecklist(), pct === 100 ? 3600 : 1500);
+}
+
+// ── VIBRATION & SOUND ──
+function vibrate() {
+  if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+}
+
+function vibrateCheck() {
+  if (navigator.vibrate) navigator.vibrate(20);
+}
+
+// ── ROOM NOTES HISTORY ──
+function openRoomNotes() {
+  document.getElementById('room-notes-title').textContent = t('roomNotesTitle');
+  renderRoomNotes();
+  document.getElementById('roomNotesScreen').classList.add('open');
+}
+function closeRoomNotes() { document.getElementById('roomNotesScreen').classList.remove('open'); }
+
+function renderRoomNotes() {
+  const val = document.getElementById('roomNotesSelect').value;
+  const body = document.getElementById('roomNotesBody');
+  if (!val) { body.innerHTML = '<div style="color:var(--warm-gray);font-size:0.85rem;padding:16px 0">' + t('roomNotesSelect') + '</div>'; return; }
+
+  const parts = val.split('-');
+  const unitLabel = parts[0]; // 'Room' or 'Chalet'
+  const unitNum = parts[1];   // '1' to '18' or '1' to '4'
+
+  const logs = loadLogs().filter(l => l.room == unitNum && (l.unitLabel || 'Room') === unitLabel);
+  const notesEntries = logs.filter(l => {
+    const n = [l.notes.bathroom, l.notes.room, l.notes.patio].filter(Boolean).join('');
+    return n.length > 0;
+  });
+  if (notesEntries.length === 0) { body.innerHTML = '<div style="color:var(--warm-gray);font-size:0.85rem;padding:16px 0">' + t('roomNotesNone') + '</div>'; return; }
+  body.innerHTML = notesEntries.map(l => {
+    const notes = [l.notes.bathroom, l.notes.room, l.notes.patio].filter(Boolean).join(' · ');
+    return '<div class="room-note-entry">' +
+      '<div class="room-note-date">' + l.date + ' · ' + l.time + '</div>' +
+      '<div class="room-note-by">By ' + l.name + ' · ' + l.pct + '% complete</div>' +
+      '<div class="room-note-text">' + notes + '</div>' +
+      (l.supervisorNote ? '<div style="margin-top:6px;font-size:0.78rem;color:var(--sage-dark)">💬 ' + l.supervisorNote + '</div>' : '') +
+    '</div>';
+  }).join('');
+}
+
+// ── CUSTOM CHECKLIST ITEMS ──
+function getCustomItems() {
+  try {
+    const key = 'vakasha_custom_' + customMode;
+    return JSON.parse(localStorage.getItem(key) || '{}');
+  } catch(e) { return {}; }
+}
+function saveCustomItems(custom) {
+  const key = 'vakasha_custom_' + customMode;
+  localStorage.setItem(key, JSON.stringify(custom));
+}
+
+function getDeletedDefaults() {
+  try {
+    const key = 'vakasha_deleted_' + customMode;
+    return JSON.parse(localStorage.getItem(key) || '{}');
+  } catch(e) { return {}; }
+}
+function saveDeletedDefaults(deleted) {
+  const key = 'vakasha_deleted_' + customMode;
+  localStorage.setItem(key, JSON.stringify(deleted));
+}
+
+function getEffectiveData() {
+  let custom = {};
+  let deleted = {};
+  try { custom = JSON.parse(localStorage.getItem('vakasha_custom_' + currentMode) || '{}'); } catch(e) {}
+  try { deleted = JSON.parse(localStorage.getItem('vakasha_deleted_' + currentMode) || '{}'); } catch(e) {}
+  const base = lang === 'ss' ? DATA_SS : DATA_EN;
+  const result = {};
+  Object.keys(base).forEach(section => {
+    const deletedKeys = deleted[section] || [];
+    result[section] = base[section].filter((item, i) => !deletedKeys.includes(i));
+    if (custom[section]) {
+      custom[section].forEach(ci => {
+        if (section.endsWith('-inv')) {
+          const itemLabel = (lang === 'ss' && ci.itemSS) ? ci.itemSS : ci.item;
+          result[section].push({qty: ci.qty || '1x', item: itemLabel});
+        } else {
+          if (typeof ci === 'string') { result[section].push(ci); }
+          else { result[section].push((lang === 'ss' && ci.ss) ? ci.ss : ci.en); }
+        }
+      });
+    }
+  });
+  return result;
+}
+
+function getData() { return getEffectiveData(); }
+
+let customMode = 'room'; // 'room' or 'chalet'
+
+function setCustomMode(mode) {
+  customMode = mode;
+  const roomBtn = document.getElementById('customModeRoomBtn');
+  const chaletBtn = document.getElementById('customModeChaletBtn');
+  roomBtn.style.background = mode === 'room' ? 'var(--sage)' : 'var(--white)';
+  roomBtn.style.color = mode === 'room' ? 'var(--white)' : 'var(--sage-dark)';
+  chaletBtn.style.background = mode === 'chalet' ? 'var(--sage)' : 'var(--white)';
+  chaletBtn.style.color = mode === 'chalet' ? 'var(--white)' : 'var(--sage-dark)';
+  renderCustomItems();
+}
+
+function getCustomStorageKey(section) {
+  return customMode + '__' + section;
+}
+
+function getDeletedStorageKey(section) {
+  return customMode + '__deleted__' + section;
+}
+
+function openCustom() {
+  document.getElementById('custom-title').textContent = t('customTitle');
+  document.getElementById('custom-add-btn').textContent = '+ ' + t('customAdd');
+  // Sync customMode with current app mode
+  customMode = currentMode;
+  setCustomMode(customMode);
+  renderCustomItems();
+  document.getElementById('customScreen').classList.add('open');
+}
+function closeCustom() { document.getElementById('customScreen').classList.remove('open'); renderAll(); }
+
+function renderCustomItems() {
+  const section = document.getElementById('customSectionSelect').value;
+  const custom = getCustomItems();
+  const deleted = getDeletedDefaults();
+  const baseItems = DATA_EN[section];
+  const customItems = custom[section] || [];
+  const deletedKeys = deleted[section] || [];
+  const list = document.getElementById('customItemsList');
+  const isInv = section.endsWith('-inv');
+
+  let html = '';
+
+  // Show default items — all deletable now
+  baseItems.forEach((item, i) => {
+    const label = isInv ? item.qty + ' ' + item.item : item;
+    const isDeleted = deletedKeys.includes(i);
+    if (isDeleted) {
+      // Show as greyed out with restore button
+      html += '<div class="custom-item-row" style="opacity:0.4">' +
+        '<span style="font-size:0.82rem;text-decoration:line-through;color:var(--warm-gray)">' + label + '</span>' +
+        '<button class="custom-del-btn" style="color:var(--sage);font-size:0.75rem" onclick="restoreDefaultItem(\'' + section + '\',' + i + ')">↩</button>' +
+      '</div>';
+    } else {
+      html += '<div class="custom-item-row">' +
+        '<span style="font-size:0.82rem;color:var(--charcoal)">' + label + '</span>' +
+        '<button class="custom-del-btn" onclick="deleteDefaultItem(\'' + section + '\',' + i + ')">✕</button>' +
+      '</div>';
+    }
+  });
+
+  // Show custom-added items
+  customItems.forEach((item, i) => {
+    let label;
+    if (isInv) {
+      label = (item.qty || '1x') + ' ' + item.item;
+    } else if (typeof item === 'string') {
+      label = item;
+    } else {
+      label = item.en || item.ss || JSON.stringify(item);
+    }
+    html += '<div class="custom-item-row is-custom">' +
+      '<span style="font-size:0.82rem">' + label + '</span>' +
+      '<button class="custom-del-btn" onclick="deleteCustomItem(\'' + section + '\',' + i + ')">✕</button>' +
+    '</div>';
+  });
+
+  list.innerHTML = html || '<div style="color:var(--warm-gray);font-size:0.85rem">No items.</div>';
+}
+
+function clearSsTranslation() {
+  document.getElementById('customItemInputSS').value = '';
+  document.getElementById('ssTranslateStatus').textContent = '';
+}
+
+async function translateToSiswati() {
+  const text = document.getElementById('customItemInput').value.trim();
+  if (!text) { showToast('Please enter an English item first'); return; }
+
+  const btn = document.getElementById('translateBtn');
+  const status = document.getElementById('ssTranslateStatus');
+  btn.disabled = true;
+  btn.textContent = '⏳ Translating…';
+  status.textContent = '— translating…';
+
+  try {
+    // MyMemory free translation API — no API key needed, works from browser
+    const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=en|ss';
+    const response = await fetch(url);
+    const data = await response.json();
+    const translation = data.responseData && data.responseData.translatedText ? data.responseData.translatedText.trim() : '';
+
+    if (translation && translation.toLowerCase() !== text.toLowerCase()) {
+      document.getElementById('customItemInputSS').value = translation;
+      status.textContent = '— translated ✓';
+    } else {
+      status.textContent = '— please type manually';
+      showToast('Translation unavailable — please type the siSwati text manually');
+    }
+  } catch(e) {
+    status.textContent = '— please type manually';
+    showToast('Please type the siSwati translation manually');
+  }
+
+  btn.disabled = false;
+  btn.textContent = '🌍 Translate';
+}
+
+function addCustomItem() {
+  const section = document.getElementById('customSectionSelect').value;
+  const input = document.getElementById('customItemInput');
+  const inputSS = document.getElementById('customItemInputSS');
+  const val = input.value.trim();
+  const valSS = inputSS.value.trim();
+  if (!val) { showToast('Please enter an item description'); return; }
+
+  const custom = getCustomItems();
+  if (!custom[section]) custom[section] = [];
+  const isInv = section.endsWith('-inv');
+
+  if (isInv) {
+    custom[section].push({ qty:'1x', item:val, itemSS: valSS || val });
+  } else {
+    custom[section].push({ en: val, ss: valSS || val });
+  }
+
+  saveCustomItems(custom);
+  input.value = '';
+  inputSS.value = '';
+  document.getElementById('ssTranslateStatus').textContent = '';
+  renderCustomItems();
+  showToast(t('customAdded'));
+}
+
+function deleteDefaultItem(section, idx) {
+  const deleted = getDeletedDefaults();
+  if (!deleted[section]) deleted[section] = [];
+  if (!deleted[section].includes(idx)) deleted[section].push(idx);
+  saveDeletedDefaults(deleted);
+  renderCustomItems();
+  showToast(t('customDeleted'));
+}
+
+function restoreDefaultItem(section, idx) {
+  const deleted = getDeletedDefaults();
+  if (deleted[section]) {
+    deleted[section] = deleted[section].filter(i => i !== idx);
+  }
+  saveDeletedDefaults(deleted);
+  renderCustomItems();
+  showToast('✓ Item restored');
+}
+
+function deleteCustomItem(section, idx) {
+  const custom = getCustomItems();
+  if (custom[section]) { custom[section].splice(idx, 1); saveCustomItems(custom); }
+  renderCustomItems();
+  showToast(t('customDeleted'));
+}
+
+// ── PIN ──
+const MANAGER_PIN = '0000';
+let pinBuffer = '';
+let pinTarget = '';
+
+function requirePin(target) {
+  pinTarget = target;
+  pinBuffer = '';
+  updatePinDots();
+  document.getElementById('pinError').textContent = '';
+  document.getElementById('pinModal').classList.add('open');
+}
+
+function pinPress(digit) {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += digit;
+  updatePinDots();
+  if (pinBuffer.length === 4) {
+    setTimeout(() => {
+      if (pinBuffer === MANAGER_PIN) {
+        document.getElementById('pinModal').classList.remove('open');
+        pinBuffer = '';
+        updatePinDots();
+        if (pinTarget === 'dashboard') openDashboard();
+        else if (pinTarget === 'summary') openSummary();
+        else if (pinTarget === 'weekly') openWeekly();
+        else if (pinTarget === 'roomNotes') openRoomNotes();
+        else if (pinTarget === 'custom') openCustom();
+      } else {
+        document.getElementById('pinError').textContent = '✕ Incorrect PIN';
+        pinBuffer = '';
+        updatePinDots();
+      }
+    }, 200);
+  }
+}
+
+function pinDelete() {
+  pinBuffer = pinBuffer.slice(0, -1);
+  updatePinDots();
+  document.getElementById('pinError').textContent = '';
+}
+
+function closePin() {
+  document.getElementById('pinModal').classList.remove('open');
+  pinBuffer = '';
+  pinTarget = '';
+  updatePinDots();
+  document.getElementById('pinError').textContent = '';
+}
+
+function closePinOutside(e) {
+  if (e.target === document.getElementById('pinModal')) closePin();
+}
+
+function updatePinDots() {
+  for (let i = 0; i < 4; i++) {
+    document.getElementById('pd' + i).classList.toggle('filled', i < pinBuffer.length);
+  }
+}
+
+// ── OFFLINE MODE ──
+let offlineQueue = [];
+
+function checkOnline() {
+  const banner = document.getElementById('offlineBanner');
+  if (navigator.onLine) {
+    banner.classList.remove('show');
+    flushOfflineQueue();
+  } else {
+    banner.classList.add('show');
+  }
+}
+
+function sendTelegramOrQueue(msg) {
+  if (navigator.onLine) {
+    fetch('https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/sendMessage', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({chat_id: TELEGRAM_CHAT_ID, text: msg})
+    }).catch(() => { offlineQueue.push(msg); saveQueue(); });
+  } else {
+    offlineQueue.push(msg);
+    saveQueue();
+  }
+}
+
+function saveQueue() { localStorage.setItem('vakasha_queue', JSON.stringify(offlineQueue)); }
+function loadQueue() { try { return JSON.parse(localStorage.getItem('vakasha_queue') || '[]'); } catch(e) { return []; } }
+
+function flushOfflineQueue() {
+  if (offlineQueue.length === 0) return;
+  const queue = [...offlineQueue];
+  offlineQueue = [];
+  saveQueue();
+  queue.forEach(msg => {
+    fetch('https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/sendMessage', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({chat_id: TELEGRAM_CHAT_ID, text: msg})
+    }).catch(() => { offlineQueue.push(msg); saveQueue(); });
+  });
+}
+
+window.addEventListener('online', checkOnline);
+window.addEventListener('offline', checkOnline);
+
+// ── DAILY SUMMARY (6PM) ──
+function buildDailySummaryMsg() {
+  const today = toDateStr(new Date());
+  const logs = loadLogs().filter(l => l.dateStr === today);
+  const roomLogs = logs.filter(l => l.unitLabel === 'Room' || !l.unitLabel);
+  const chaletLogs = logs.filter(l => l.unitLabel === 'Chalet');
+  const date = formatDateMain(new Date());
+
+  let msg = '📊 VAKASHA DAILY SUMMARY\n' + date + '\n\n';
+
+  msg += '🏨 ROOMS\n';
+  msg += '✅ Complete: ' + roomLogs.filter(l => l.pct === 100).length + '\n';
+  msg += '⚠️ Partial: ' + roomLogs.filter(l => l.pct < 100).length + '\n';
+  msg += '⬜ Not started: ' + (18 - roomLogs.length) + '\n';
+
+  msg += '\n🏡 CHALETS\n';
+  msg += '✅ Complete: ' + chaletLogs.filter(l => l.pct === 100).length + '\n';
+  msg += '⚠️ Partial: ' + chaletLogs.filter(l => l.pct < 100).length + '\n';
+  msg += '⬜ Not started: ' + (4 - chaletLogs.length) + '\n';
+
+  const allIncomplete = logs.filter(l => l.pct < 100);
+  if (allIncomplete.length > 0) {
+    msg += '\n─────────────────\n⚠️ INCOMPLETE:\n';
+    allIncomplete.forEach(l => {
+      msg += (l.unitLabel||'Room') + ' ' + l.room + ' (' + l.pct + '%) — ' + l.name + '\n';
+    });
+  }
+  return msg;
+}
+
+function checkDailySummaryTime() {
+  const now = new Date();
+  const hour = now.getHours();
+  const min = now.getMinutes();
+  const todayKey = 'daily_sent_' + toDateStr(now);
+
+  if (hour === 18 && min < 5 && !localStorage.getItem(todayKey)) {
+    localStorage.setItem(todayKey, '1');
+    const msg = buildDailySummaryMsg();
+    sendTelegramOrQueue(msg);
+  }
+}
+
+// Check every minute
+setInterval(checkDailySummaryTime, 60000);
+
+// ── INIT ──
+applyDark();
+applyLang();
+updateDateDisplay();
+renderAll();
+offlineQueue = loadQueue();
+checkOnline();
+checkDailySummaryTime();
+
+// Splash screen — hide after 2.5s
+setTimeout(() => {
+  const splash = document.getElementById('splashScreen');
+  splash.classList.add('fade-out');
+  setTimeout(() => { splash.style.display = 'none'; }, 650);
+}, 2500);
+
+// ── REFRESH/LEAVE WARNING ──
+window.addEventListener('beforeunload', function(e) {
+  const keys = allKeys();
+  const anyChecked = keys.some(k => state[k]);
+  const roomFilled = document.getElementById('roomNum').value || document.getElementById('chaletNum').value;
+  const nameFilled = document.getElementById('checkedBy').value.trim();
+  if (anyChecked || roomFilled || nameFilled) {
+    const msg = 'You have unsaved checklist data. If you refresh, all progress will be lost.';
+    e.preventDefault();
+    e.returnValue = msg;
+    return msg;
+  }
+});
+
+// ── SERVICE WORKER (removes Chrome badge) ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
